@@ -1,7 +1,7 @@
-package com.ms.itec.repositories
+package com.ms.itec.infrastructure.persistence
 
+import com.ms.itec.application.enums.Polos
 import com.ms.itec.entity.Forms
-import com.ms.itec.enums.Polos
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 

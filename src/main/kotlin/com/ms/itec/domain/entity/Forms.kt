@@ -1,6 +1,6 @@
 package com.ms.itec.entity
 
-import com.ms.itec.enums.Polos
+import com.ms.itec.application.enums.Polos
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
@@ -14,7 +14,7 @@ data class Forms(
     val name: String = "",
     val email: String= "",
     val phone: String= "",
-    val polo : Polos= Polos.Undecided,
+    val polo : Polos = Polos.Undecided,
     val course: String= "",
     val cupom: String= "",
     val emailMarketing: Boolean = false,

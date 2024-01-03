@@ -1,9 +1,9 @@
 package com.ms.itec.entity.course
 
-import com.ms.itec.enums.Tag
-import com.ms.itec.enums.TagCourse
+import com.ms.itec.application.enums.TagCourse
 import jakarta.persistence.*
 import java.util.*
+
 @Entity
 data class Course(
     @Id @GeneratedValue(strategy = GenerationType.UUID)

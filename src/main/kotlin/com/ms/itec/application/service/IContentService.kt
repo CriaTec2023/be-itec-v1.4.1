@@ -1,4 +1,4 @@
-package com.ms.itec.service
+package com.ms.itec.application.service
 
 import com.ms.itec.entity.Content
 

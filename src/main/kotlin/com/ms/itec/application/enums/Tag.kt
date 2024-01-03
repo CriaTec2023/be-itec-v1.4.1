@@ -1,4 +1,4 @@
-package com.ms.itec.enums
+package com.ms.itec.application.enums
 
 enum class Tag(val value:String) {
     NEWS("NEWS"),

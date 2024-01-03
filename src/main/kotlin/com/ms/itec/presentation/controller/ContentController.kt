@@ -1,12 +1,12 @@
-package com.ms.itec.controllers
+package com.ms.itec.presentation.controller
 
+import com.ms.itec.application.service.impl.ContentServiceImpl
 import com.ms.itec.entity.Content
-import com.ms.itec.service.impl.ContentServiceImpl
 import org.springframework.web.bind.annotation.*
 
 
 @RestController
-@RequestMapping("content")
+@RequestMapping("v1/content")
 class ContentController(private val contentService: ContentServiceImpl) {
 
     @PostMapping("/save")
