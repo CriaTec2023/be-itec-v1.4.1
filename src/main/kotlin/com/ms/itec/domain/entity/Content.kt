@@ -7,12 +7,12 @@ import java.util.*
 @Entity
 data class Content(
     @Id @GeneratedValue(strategy = GenerationType.UUID)
-    val id: String = UUID.randomUUID().toString(),
+    var id: String = UUID.randomUUID().toString(),
     @Enumerated(EnumType.STRING)
-    val tag: Tag,
-    val title: String = "",
-    val description: String = "",
-    val content: String = "",
-    val background: String = "",
-    val avgSalary: Double = 0.0,
+    var tag: Tag,
+    var title: String = "",
+    var description: String = "",
+    var content: String = "",
+    var background: String = "",
+    var avgSalary: Double = 0.0,
 )
