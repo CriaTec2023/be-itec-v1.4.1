@@ -11,5 +11,6 @@ interface IContentService {
     fun update(contentDto: ContentDtoWithId): Content
     fun getAll(): List<Content>
     fun delete(id: String)
+    fun retriveByTag(tagParam:String): List<Content>
 
 }

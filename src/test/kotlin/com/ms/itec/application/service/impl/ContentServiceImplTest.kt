@@ -4,7 +4,7 @@ import com.ms.itec.application.dto.request.ContentDto
 import com.ms.itec.application.dto.request.ContentDtoWithId
 import com.ms.itec.application.enums.Tag
 import com.ms.itec.entity.Content
-import com.ms.itec.infrastructure.persistence.ContentPersistence
+import com.ms.itec.infrastructure.persistence.IContentPersistence
 import com.ms.itec.presentation.excepetion.OperationNotComplete
 import com.ms.itec.presentation.excepetion.RecordNotFound
 import com.ms.itec.presentation.mapper.FromDto
@@ -19,12 +19,12 @@ import java.util.*
 class ContentServiceImplTest {
 
 
-    private lateinit var contentPersistence: ContentPersistence
+    private lateinit var contentPersistence: IContentPersistence
     private lateinit var contentServiceImpl: ContentServiceImpl
 
     @BeforeEach
     fun setUp() {
-        contentPersistence = mock(ContentPersistence::class.java)
+        contentPersistence = mock(IContentPersistence::class.java)
         contentServiceImpl = ContentServiceImpl(contentPersistence)
     }
 
@@ -271,5 +271,43 @@ class ContentServiceImplTest {
             contentServiceImpl.delete(expectId)
         }
     }
+
+    @Test
+    fun givenValidTag_whenCallRetriveByTag_thenReturnListOfContent() {
+        val expectId = UUID.randomUUID().toString()
+        val expectId2 = UUID.randomUUID().toString()
+
+        `when`(contentPersistence.retriveByTag(Tag.POST)).thenReturn(
+            listOf(
+                Content(
+                    id = expectId,
+                    tag = Tag.POST,
+                    title = "Post title",
+                    description = "Post description",
+                    content = "Post content",
+                    background = "Post background",
+                    avgSalary = 0.0
+                ),
+                Content(
+                    id = expectId2,
+                    tag = Tag.POST,
+                    title = "Post title 2",
+                    description = "Post description 2",
+                    content = "Post content 2",
+                    background = "Post background 2",
+                    avgSalary = 0.0
+                )
+            )
+        )
+
+        val contents = contentServiceImpl.retriveByTag("POST")
+
+        assertEquals(2, contents.size)
+        assertEquals(expectId, contents[0].id)
+        assertEquals(expectId2, contents[1].id)
+    }
+
+
+
 
 }

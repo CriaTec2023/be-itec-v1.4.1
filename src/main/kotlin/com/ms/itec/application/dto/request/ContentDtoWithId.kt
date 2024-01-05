@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.PositiveOrZero
 
-class ContentDtoWithId(
+data class ContentDtoWithId(
 
     @field:NotBlank(message = "O campo id é obrigatório")
     val id: String,
