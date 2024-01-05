@@ -54,6 +54,13 @@ class ContentServiceImpl(private val contentPersistence: ContentPersistence): IC
         return result.getOrElse { emptyList() }
     }
 
+    override fun delete(id: String) {
+        val result = runCatching { contentPersistence.deleteById(id) }
+        result.getOrElse {
+            throw RecordNotFound("Record not found, id: $id")
+        }
+    }
+
     private fun areContentsEqual(contentRecord: Content, contentDto: ContentDtoWithId): Boolean {
         return Objects.equals(contentRecord.title, contentDto.title) &&
                 Objects.equals(contentRecord.description, contentDto.description) &&

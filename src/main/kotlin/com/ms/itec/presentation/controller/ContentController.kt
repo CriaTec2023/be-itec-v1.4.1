@@ -18,7 +18,7 @@ class ContentController(private val contentService: ContentServiceImpl) {
     fun save(@RequestBody contentDto: ContentDto):ResponseEntity<ResponseUpdateAndSaveDto> {
        val response =  contentService.save(contentDto)
         return ResponseEntity.status(HttpStatus.CREATED).body(
-            ResponseUpdateAndSaveDto( "SAVED", "Content: ${response.title} created with id: ${response.id}")
+            ResponseUpdateAndSaveDto( "'SUCCESSFULLY SAVED':", "Content: ${response.title} created with id: ${response.id}")
         )
     }
 
@@ -26,7 +26,7 @@ class ContentController(private val contentService: ContentServiceImpl) {
     fun update(@RequestBody contentDto: ContentDtoWithId):ResponseEntity<ResponseUpdateAndSaveDto> {
         val response =  contentService.update(contentDto)
         return ResponseEntity.status(HttpStatus.OK).body(
-            ResponseUpdateAndSaveDto( "UPDATE","Content Update: ${response.title} update content with id: ${response.id}")
+            ResponseUpdateAndSaveDto( "'SUCCESSFULLY UPDATED':","Content Update: ${response.title} update content with id: ${response.id}")
         )
     }
 
@@ -34,5 +34,13 @@ class ContentController(private val contentService: ContentServiceImpl) {
     fun getAll(): ResponseEntity<List<Content>> {
         val response =  contentService.getAll()
         return ResponseEntity.status(HttpStatus.OK).body(response)
+    }
+
+    @DeleteMapping("/delete/{id}")
+    fun delete(@PathVariable id: String): ResponseEntity<ResponseUpdateAndSaveDto> {
+        contentService.delete(id)
+        return ResponseEntity.status(HttpStatus.OK).body(
+            ResponseUpdateAndSaveDto( "'SUCCESSFULLY DELETED':","Content deleted with id: $id")
+        )
     }
 }

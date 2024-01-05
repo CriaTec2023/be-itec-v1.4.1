@@ -10,5 +10,6 @@ interface IContentService {
     fun save(contentDto: ContentDto): Content
     fun update(contentDto: ContentDtoWithId): Content
     fun getAll(): List<Content>
+    fun delete(id: String)
 
 }
