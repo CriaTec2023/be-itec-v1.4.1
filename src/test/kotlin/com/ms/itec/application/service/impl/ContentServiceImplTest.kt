@@ -243,7 +243,33 @@ class ContentServiceImplTest {
         val contents = contentServiceImpl.getAll()
 
         assertTrue(contents.isEmpty())
+    }
 
+    @Test
+    fun givenAValidId_whenCallDelete_thenDeleteOnPersistence() {
+        val expectId = UUID.randomUUID().toString()
+
+        `when`(contentPersistence.deleteById(any())).thenAnswer {
+            val id = it.arguments[0] as String
+            assertEquals(expectId, id)
+        }
+
+        contentServiceImpl.delete(expectId)
+
+        verify(contentPersistence, times(1)).deleteById(any())
+    }
+
+    @Test
+    fun givenAInvalidId_whenCallDelete_thenThrowRecordNotFoundException() {
+        val expectId = UUID.randomUUID().toString()
+
+        `when`(contentPersistence.deleteById(any())).thenThrow(
+            RecordNotFound("Record not found, id: $expectId")
+        )
+
+        assertThrows(RecordNotFound::class.java) {
+            contentServiceImpl.delete(expectId)
+        }
     }
 
 }
