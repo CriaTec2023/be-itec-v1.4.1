@@ -1,4 +1,8 @@
+CREATE database itecdb;
+
 CREATE TABLE if not exists Content (
+
+
                          id UUID PRIMARY KEY,
                          tag VARCHAR(20) NOT NULL,
                          title VARCHAR(255) NOT NULL,
