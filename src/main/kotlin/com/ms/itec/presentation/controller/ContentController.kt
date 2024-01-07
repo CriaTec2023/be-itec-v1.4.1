@@ -4,7 +4,6 @@ import com.ms.itec.application.dto.request.ContentDto
 import com.ms.itec.application.dto.request.ContentDtoWithId
 import com.ms.itec.application.dto.response.ResponseUpdateAndSaveDto
 import com.ms.itec.application.service.impl.ContentServiceImpl
-import com.ms.itec.entity.Content
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -31,8 +30,11 @@ class ContentController(private val contentService: ContentServiceImpl) {
     }
 
     @GetMapping("/allRecords")
-    fun getAll(): ResponseEntity<List<Content>> {
+    fun getAll(): ResponseEntity<Any> {
         val response =  contentService.getAll()
+        if (response.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("NO CONTENT")
+        }
         return ResponseEntity.status(HttpStatus.OK).body(response)
     }
 

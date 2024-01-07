@@ -19,8 +19,7 @@ class ContentServiceImpl(private val contentPersistence: IContentPersistence): I
 
     override fun save(contentDto: ContentDto): Content {
         val content: Content  = FromDto().toEntity(contentDto)
-        val result = runCatching { contentPersistence.save(content) }
-        return result.getOrElse {
+        return runCatching { contentPersistence.save(content) }.getOrElse {
             throw OperationNotComplete("Error saving content", it)
         }
     }
@@ -42,7 +41,6 @@ class ContentServiceImpl(private val contentPersistence: IContentPersistence): I
             }
             contentPersistence.save(contentRecord)
         } else {
-
             contentRecord
         }
 
@@ -54,8 +52,7 @@ class ContentServiceImpl(private val contentPersistence: IContentPersistence): I
     }
 
     override fun delete(id: String) {
-        val result = runCatching { contentPersistence.deleteById(id) }
-        result.getOrElse {
+        runCatching { contentPersistence.deleteById(id) }.getOrElse {
             throw RecordNotFound("Record not found, id: $id")
         }
     }
