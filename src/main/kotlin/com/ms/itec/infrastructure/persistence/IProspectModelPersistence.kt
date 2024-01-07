@@ -14,12 +14,13 @@ import java.util.*
 interface IProspectModelPersistence: JpaRepository<ProspectModel, String>, ProspectModelRepository{
 
         @Query("SELECT p FROM ProspectModel p WHERE p.ownerId = ''")
-        override fun getWithoutOwner(): List<Optional<ProspectModel>>
+        override fun getWithoutOwner(): Optional<List<ProspectModel>>
 
         @Query("SELECT p FROM ProspectModel p WHERE p.ownerId = :ownerId")
-        override fun getWithIdOwner(@Param("ownerId")id:String): List<Optional<ProspectModel>>
+        override fun getWithIdOwner(@Param("ownerId")id:String): Optional<List<ProspectModel>>
 
+//        fun getByOwnerIdEmpty():Optional<List<ProspectModel>>
 
-
+//        fun getByOwnerIdEquals(ownerId: String): Optional<List<ProspectModel>>
 
 }

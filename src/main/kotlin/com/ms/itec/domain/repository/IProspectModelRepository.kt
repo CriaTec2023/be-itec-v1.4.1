@@ -5,9 +5,9 @@ import java.util.Optional
 
 interface ProspectModelRepository {
 
-    fun getWithoutOwner(): List<Optional<ProspectModel>>
+    fun getWithoutOwner(): Optional<List<ProspectModel>>
 
-    fun getWithIdOwner(id:String): List<Optional<ProspectModel>>
+    fun getWithIdOwner(id:String): Optional<List<ProspectModel>>
 
 
 

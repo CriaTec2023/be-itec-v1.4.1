@@ -1,7 +1,7 @@
 package com.ms.itec.application.enums
 
 enum class Polos(val value:String) {
-    VR_VILA("VR-VILA"),
+    VR_VILA("VR_VILA"),
     VR_RETIRO("VR-RETIRO"),
     ANGRA_DOS_REIS("ANGRA DOS REIS"),
     RESENDE("RESENDE"),

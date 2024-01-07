@@ -1,10 +1,12 @@
 package com.ms.itec.application.service.impl
 
 import com.ms.itec.application.dto.request.ProspectModelDto
+import com.ms.itec.application.enums.Polos
 import com.ms.itec.application.service.IProspectModelService
 import com.ms.itec.domain.entity.ProspectModel
 import com.ms.itec.infrastructure.persistence.IProspectModelPersistence
 import com.ms.itec.presentation.excepetion.OperationNotComplete
+import com.ms.itec.presentation.excepetion.RecordNotFound
 import com.ms.itec.presentation.mapper.FromDto
 import org.springframework.stereotype.Service
 import java.util.*
@@ -13,9 +15,8 @@ import java.util.*
 class ProspectModelServiceImpl(private var prospectPersistence: IProspectModelPersistence): IProspectModelService{
     override fun save(prospectModelDto: ProspectModelDto): ProspectModel {
         val prospectModel: ProspectModel = FromDto().toEntity(prospectModelDto)
-        val result = runCatching { prospectPersistence.save(prospectModel) }
-        return result.getOrElse {
-            throw OperationNotComplete("Error saving", it)
+        return runCatching { prospectPersistence.save(prospectModel) }.getOrElse {
+            throw OperationNotComplete("ERROR SAVING: ", it)
         }
     }
 
@@ -24,23 +25,34 @@ class ProspectModelServiceImpl(private var prospectPersistence: IProspectModelPe
 
 //    REFATORARNÃOCONFIAVEL
     override fun getWithOwner(ownerId: String): List<ProspectModel> {
-        return runCatching {
-            prospectPersistence.getWithIdOwner(ownerId)
-        }.getOrElse {
-
-            println("Erro ao obter prospects com owner ID $ownerId: ${it.message}")
-
-            emptyList()
-        } as List<ProspectModel>
-
+        return prospectPersistence.getWithIdOwner(ownerId).orElseThrow {
+                throw RecordNotFound("ERROR GETTING PROSPECTS WITH 'OWNER ID': $ownerId ")
+        }
     }
 
     override fun getWithoutOwner(): List<ProspectModel> {
-        TODO("Not yet implemented")
+        return prospectPersistence.getWithoutOwner().orElseThrow {
+            throw RecordNotFound("ERROR GETTING PROSPECTS WITHOUT 'OWNER ID' ")
+        }
     }
 
     override fun update(prospectModelDto: ProspectModelDto): ProspectModel {
-        TODO("Not yet implemented")
+        val prospectModelForRecord = FromDto().toEntity(prospectModelDto)
+        return if (!areProspectModelsEqual(prospectModelForRecord, prospectModelDto)) {
+            prospectModelForRecord.apply {
+                name = prospectModelDto.name
+                email = prospectModelDto.email
+                phone = prospectModelDto.phone
+                polo = prospectModelDto.polo?.let { Polos.valueOf(it) }
+                course = prospectModelDto.course
+                cupom = prospectModelDto.cupom!!
+                emailMarketing = prospectModelDto.emailMarketing
+
+            }
+            prospectPersistence.save(prospectModelForRecord)
+        } else {
+            prospectModelForRecord
+        }
     }
 
     override fun delete(id: String) {
@@ -51,4 +63,16 @@ class ProspectModelServiceImpl(private var prospectPersistence: IProspectModelPe
         TODO("Not yet implemented")
     }
 
+    private fun areProspectModelsEqual(prospectModel: ProspectModel, prospectModelDto: ProspectModelDto): Boolean {
+        return Objects.equals(prospectModel.name, prospectModelDto.name) &&
+                Objects.equals(prospectModel.email, prospectModelDto.email) &&
+                Objects.equals(prospectModel.phone, prospectModelDto.phone) &&
+                Objects.equals(prospectModel.polo, prospectModelDto.polo) &&
+                Objects.equals(prospectModel.phone, prospectModelDto.phone) &&
+                Objects.equals(prospectModel.course, prospectModelDto.course) &&
+                Objects.equals(prospectModel.cupom, prospectModelDto.cupom) &&
+                Objects.equals(prospectModel.emailMarketing, prospectModelDto.emailMarketing)
+
+
+    }
 }
