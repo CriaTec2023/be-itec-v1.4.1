@@ -7,15 +7,19 @@ import com.ms.itec.application.service.impl.ContentServiceImpl
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.util.logging.Logger
 
 
 @RestController
 @RequestMapping("v1/contents")
 class ContentController(private val contentService: ContentServiceImpl) {
 
+    private val logger = org.slf4j.LoggerFactory.getLogger(this.javaClass)
+
     @PostMapping("/recordContent")
     fun save(@RequestBody contentDto: ContentDto):ResponseEntity<ResponseUpdateAndSaveDto> {
        val response =  contentService.save(contentDto)
+        logger.info("Content saved: ${response.title} with id: ${response.id}")
         return ResponseEntity.status(HttpStatus.CREATED).body(
             ResponseUpdateAndSaveDto( "'SUCCESSFULLY SAVED':", "Content: ${response.title} created with id: ${response.id}")
         )
@@ -24,6 +28,7 @@ class ContentController(private val contentService: ContentServiceImpl) {
     @PostMapping("/update")
     fun update(@RequestBody contentDto: ContentDtoWithId):ResponseEntity<ResponseUpdateAndSaveDto> {
         val response =  contentService.update(contentDto)
+        logger.info("Content Update: ${response.title} with id: ${response.id}")
         return ResponseEntity.status(HttpStatus.OK).body(
             ResponseUpdateAndSaveDto( "'SUCCESSFULLY UPDATED':","Content Update: ${response.title} update content with id: ${response.id}")
         )
@@ -41,6 +46,8 @@ class ContentController(private val contentService: ContentServiceImpl) {
     @DeleteMapping("/delete/{id}")
     fun delete(@PathVariable id: String): ResponseEntity<ResponseUpdateAndSaveDto> {
         contentService.delete(id)
+        logger.info("Content delete $id")
+
         return ResponseEntity.status(HttpStatus.OK).body(
             ResponseUpdateAndSaveDto( "'SUCCESSFULLY DELETED':","Content deleted with id: $id")
         )

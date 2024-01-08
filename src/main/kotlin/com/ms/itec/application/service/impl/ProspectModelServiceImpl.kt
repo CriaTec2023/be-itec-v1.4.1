@@ -1,6 +1,8 @@
 package com.ms.itec.application.service.impl
 
 import com.ms.itec.application.dto.request.ProspectModelDto
+import com.ms.itec.application.dto.request.ProspectModelWithIdDto
+import com.ms.itec.application.dto.response.ProspectResponseDto
 import com.ms.itec.application.enums.Polos
 import com.ms.itec.application.service.IProspectModelService
 import com.ms.itec.domain.entity.ProspectModel
@@ -8,6 +10,7 @@ import com.ms.itec.infrastructure.persistence.IProspectModelPersistence
 import com.ms.itec.presentation.excepetion.OperationNotComplete
 import com.ms.itec.presentation.excepetion.RecordNotFound
 import com.ms.itec.presentation.mapper.FromDto
+import com.ms.itec.presentation.mapper.FromEntity
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -20,59 +23,79 @@ class ProspectModelServiceImpl(private var prospectPersistence: IProspectModelPe
         }
     }
 
+    override fun getWithOwner(idOwner: String): List<ProspectModel> {
 
-
-
-//    REFATORARNÃOCONFIAVEL
-    override fun getWithOwner(ownerId: String): List<ProspectModel> {
-        return prospectPersistence.getWithIdOwner(ownerId).orElseThrow {
-                throw RecordNotFound("ERROR GETTING PROSPECTS WITH 'OWNER ID': $ownerId ")
+        val listOfProspects = prospectPersistence.getWithIdOwner(idOwner).orElseThrow {
+                throw RecordNotFound("ERROR GETTING PROSPECTS WITH 'OWNER ID': $idOwner ")
         }
+
+        return listOfProspects.sortedByDescending { it.createdAt }
     }
 
     override fun getWithoutOwner(): List<ProspectModel> {
-        return prospectPersistence.getWithoutOwner().orElseThrow {
+        val listOfProspects = prospectPersistence.getWithoutOwner().orElseThrow {
             throw RecordNotFound("ERROR GETTING PROSPECTS WITHOUT 'OWNER ID' ")
         }
+
+        return listOfProspects.sortedByDescending { it.createdAt }
     }
 
-    override fun update(prospectModelDto: ProspectModelDto): ProspectModel {
-        val prospectModelForRecord = FromDto().toEntity(prospectModelDto)
-        return if (!areProspectModelsEqual(prospectModelForRecord, prospectModelDto)) {
-            prospectModelForRecord.apply {
-                name = prospectModelDto.name
-                email = prospectModelDto.email
-                phone = prospectModelDto.phone
-                polo = prospectModelDto.polo?.let { Polos.valueOf(it) }
-                course = prospectModelDto.course
-                cupom = prospectModelDto.cupom!!
-                emailMarketing = prospectModelDto.emailMarketing
+    override fun update(prospectModelDto: ProspectModelWithIdDto): ProspectModel {
+        val prospectModel = prospectPersistence.findById(prospectModelDto.id).orElseThrow {
+            throw RecordNotFound("Record not found, id: ${prospectModelDto.id}")
+        }
+        println("Objeto antes do save: $prospectModelDto")
 
-            }
-            prospectPersistence.save(prospectModelForRecord)
-        } else {
-            prospectModelForRecord
+        if (!areProspectModelsEqual(prospectModel, prospectModelDto)) {
+            prospectModel.name = prospectModelDto.name
+            prospectModel.email = prospectModelDto.email
+            prospectModel.phone = FromDto().formatBrazilianPhoneNumber(prospectModelDto.phone)
+            prospectModel.polo = prospectModelDto.polo?.let { Polos.valueOf(it) }
+            prospectModel.course = prospectModelDto.course
+            prospectModel.cupom = prospectModelDto.cupom
+            prospectModel.emailMarketing = prospectModelDto.emailMarketing
+
+            // Adicione logs para debug
+            println("Objeto antes do save: $prospectModel")
+
+            // Salvar fora do bloco if
+            prospectPersistence.save(prospectModel)
+
+            // Adicione logs para debug
+            println("Objeto após o save: $prospectModel")
+        }
+
+        return prospectModel
+    }
+
+    override fun delete(idProspect: String) {
+        val prospectRecord = prospectPersistence.findById(idProspect).orElseThrow {
+            throw RecordNotFound("Record not found, id: $idProspect")
+        }
+
+        runCatching { prospectPersistence.delete(prospectRecord) }.getOrElse {
+            throw OperationNotComplete("Error deleting prospect", it)
         }
     }
 
-    override fun delete(id: String) {
-        TODO("Not yet implemented")
+    override fun updateContacted(idProspect: String,idOwner:String): ProspectModel {
+        val prospectRecord = prospectPersistence.findById(idProspect).orElseThrow {
+            throw RecordNotFound("Record not found, id: $idProspect")
+        }
+        prospectRecord.apply {
+            ownerId = idOwner
+            contacted = true
+        }
+        return prospectPersistence.save(prospectRecord)
     }
-
-    override fun updateContacted(id: String): ProspectModel {
-        TODO("Not yet implemented")
-    }
-
-    private fun areProspectModelsEqual(prospectModel: ProspectModel, prospectModelDto: ProspectModelDto): Boolean {
+    private fun areProspectModelsEqual(prospectModel: ProspectModel, prospectModelDto: ProspectModelWithIdDto): Boolean {
         return Objects.equals(prospectModel.name, prospectModelDto.name) &&
                 Objects.equals(prospectModel.email, prospectModelDto.email) &&
                 Objects.equals(prospectModel.phone, prospectModelDto.phone) &&
-                Objects.equals(prospectModel.polo, prospectModelDto.polo) &&
-                Objects.equals(prospectModel.phone, prospectModelDto.phone) &&
+                Objects.equals(prospectModel.polo, Polos.valueOf(prospectModelDto.polo!!)) &&
                 Objects.equals(prospectModel.course, prospectModelDto.course) &&
                 Objects.equals(prospectModel.cupom, prospectModelDto.cupom) &&
                 Objects.equals(prospectModel.emailMarketing, prospectModelDto.emailMarketing)
-
-
     }
+
 }

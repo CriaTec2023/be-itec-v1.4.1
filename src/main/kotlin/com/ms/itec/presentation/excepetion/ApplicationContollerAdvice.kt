@@ -13,6 +13,8 @@ class ApplicationContollerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     fun handleOperationNotComplete(ex: OperationNotComplete):Map<String, String> {
+        val logger = org.slf4j.LoggerFactory.getLogger(this.javaClass)
+        logger.error("Operation Not Completed: ${ex.message}")
         return mapOf("Operation Not Completed:" to ex.message!!)
     }
 
@@ -20,6 +22,8 @@ class ApplicationContollerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     fun handleValidationExceptions(ex: IllegalArgumentException): Map<String, String> {
+        val logger = org.slf4j.LoggerFactory.getLogger(this.javaClass)
+        logger.error("Operation Not Completed: ${ex.message}")
         return mapOf("Invalid Arguments passed in parameters:" to ex.message!!)
     }
 
@@ -27,6 +31,8 @@ class ApplicationContollerAdvice {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
     fun handleRecordNotfound(ex: OperationNotComplete): Map<String, String> {
+        val logger = org.slf4j.LoggerFactory.getLogger(this.javaClass)
+        logger.error("Operation Not Completed: ${ex.message}")
         return mapOf("Record Not Found" to ex.message!!)
     }
 }

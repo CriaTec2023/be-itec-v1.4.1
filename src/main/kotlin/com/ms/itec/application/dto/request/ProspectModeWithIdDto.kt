@@ -4,7 +4,9 @@ import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
 
-data class ProspectModelDto(
+data class ProspectModelWithIdDto(
+    @field:NotBlank(message = "O campo id é obrigatório")
+    val id: String = "",
     @field:NotBlank(message = "O campo nome é obrigatório")
     var name: String = "",
     @field:Email(message = "O campo email é obrigatório")
@@ -21,4 +23,4 @@ data class ProspectModelDto(
     var cupom: String = "",
     var emailMarketing: Boolean = false,
 
-)
+    )
