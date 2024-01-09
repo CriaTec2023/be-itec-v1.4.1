@@ -6,6 +6,10 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 @Entity
@@ -21,7 +25,7 @@ data class ProspectModel(
     var cupom: String= "",
     var emailMarketing: Boolean = false,
     var contacted: Boolean = false,
-    val createdAt: Date = Date.from(Instant.now()),
-    var updatedAt: Instant = Instant.now(),
+    val createdAt: LocalDate = LocalDate.now(),
+    var updatedAt: LocalDateTime = LocalDateTime.now()
 
-)
+    )

@@ -8,6 +8,7 @@ class FromEntity {
     fun toDto(prospectModel: ProspectModel): ProspectResponseDto {
 
         return ProspectResponseDto(
+            id = prospectModel.id,
             contacted = prospectModel.contacted,
             createdAt = prospectModel.createdAt.toString(),
             name = prospectModel.name,

@@ -9,6 +9,10 @@ import com.ms.itec.entity.Content
 import com.ms.itec.domain.entity.ProspectModel
 import jakarta.validation.Valid
 import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class FromDto {
@@ -38,9 +42,11 @@ class FromDto {
             emailMarketing = dto.emailMarketing,
             contacted = false,
             ownerId = "",
-            createdAt = Date.from(Instant.now()),
-            updatedAt = Instant.now()
+            createdAt = LocalDate.now(),
+            updatedAt =  LocalDateTime.parse(LocalDateTime.now().toString(), DateTimeFormatter.ISO_DATE_TIME)
+
         )
+
     }
 
     fun toEntity(@Valid dto: ProspectModelWithIdDto): ProspectModel {
@@ -56,10 +62,10 @@ class FromDto {
             emailMarketing = dto.emailMarketing,
             contacted = false,
             ownerId = "",
-            createdAt = Date.from(Instant.now()),
-            updatedAt = Instant.now()
+            createdAt = LocalDate.now(),
+            updatedAt = LocalDateTime.now()
         )
-    }
+        }
 
 
     fun formatBrazilianPhoneNumber(input: String): String {
@@ -67,19 +73,19 @@ class FromDto {
         val cleanedInput = input.replace("\\D".toRegex(), "")
 
         // Verifica se o número tem o formato esperado (DDD + 9 dígitos)
-        return if (cleanedInput.length >= 10 && cleanedInput.length <= 11) {
+        return if (cleanedInput.length in 10..11) {
             // Extrai o DDD e o número de telefone
             val ddd = cleanedInput.substring(0, 2)
             val phoneNumber = cleanedInput.substring(2)
 
             // Formata o número
-            return when {
-                cleanedInput.length == 10 -> "(0$ddd) $phoneNumber" // Sem o nono dígito
-                cleanedInput.length == 11 -> "($ddd) $phoneNumber" // Com o nono dígito
-                else -> input
+            return when (cleanedInput.length) {
+                10 -> "(0$ddd) $phoneNumber" // Sem o nono dígito
+                11 -> "($ddd) $phoneNumber" // Com o nono dígito
+                else -> cleanedInput
             }
         } else {
-            input
+            cleanedInput
         }
     }
 }
