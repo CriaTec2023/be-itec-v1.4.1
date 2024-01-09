@@ -62,20 +62,24 @@ class FromDto {
     }
 
 
-     fun formatBrazilianPhoneNumber(input: String): String {
+    fun formatBrazilianPhoneNumber(input: String): String {
         // Remove todos os caracteres não numéricos
         val cleanedInput = input.replace("\\D".toRegex(), "")
 
         // Verifica se o número tem o formato esperado (DDD + 9 dígitos)
-        return if (cleanedInput.length == 11) {
+        return if (cleanedInput.length >= 10 && cleanedInput.length <= 11) {
             // Extrai o DDD e o número de telefone
             val ddd = cleanedInput.substring(0, 2)
             val phoneNumber = cleanedInput.substring(2)
 
             // Formata o número
-            "($ddd) $phoneNumber"
+            return when {
+                cleanedInput.length == 10 -> "(0$ddd) $phoneNumber" // Sem o nono dígito
+                cleanedInput.length == 11 -> "($ddd) $phoneNumber" // Com o nono dígito
+                else -> input
+            }
         } else {
-            "Número inválido"
+            input
         }
     }
 }
