@@ -1,7 +1,5 @@
 package com.ms.itec.application.dto.request
 
-import com.ms.itec.application.enums.Tag
-import com.ms.itec.entity.Content
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Pattern

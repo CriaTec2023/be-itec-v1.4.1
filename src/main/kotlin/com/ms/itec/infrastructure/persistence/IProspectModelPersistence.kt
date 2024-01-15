@@ -1,7 +1,7 @@
 package com.ms.itec.infrastructure.persistence
 
 import com.ms.itec.domain.repository.ProspectModelRepository
-import com.ms.itec.domain.entity.ProspectModel
+import com.ms.itec.domain.prospectModel.ProspectModel
 import jakarta.transaction.Transactional
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query

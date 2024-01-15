@@ -1,13 +1,14 @@
-package com.ms.itec.entity
+package com.ms.itec.domain.entity.content
 
 import com.ms.itec.application.enums.Tag
+import com.ms.itec.domain.entity.IdentifierProducer
 import jakarta.persistence.*
 import java.util.*
 
 @Entity
 data class Content(
     @Id @GeneratedValue(strategy = GenerationType.UUID)
-    var id: String = UUID.randomUUID().toString(),
+    var id: String = IdentifierProducer().creatIndentification(),
     @Enumerated(EnumType.STRING)
     var tag: Tag,
     var title: String = "",

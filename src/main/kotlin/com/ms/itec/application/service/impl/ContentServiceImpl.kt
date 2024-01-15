@@ -4,7 +4,7 @@ import com.ms.itec.application.dto.request.ContentDto
 import com.ms.itec.application.dto.request.ContentDtoWithId
 import com.ms.itec.application.enums.Tag
 import com.ms.itec.application.service.IContentService
-import com.ms.itec.entity.Content
+import com.ms.itec.domain.entity.content.Content
 import com.ms.itec.infrastructure.persistence.IContentPersistence
 import com.ms.itec.presentation.excepetion.OperationNotComplete
 import com.ms.itec.presentation.excepetion.RecordNotFound
@@ -18,7 +18,7 @@ class ContentServiceImpl(private val contentPersistence: IContentPersistence): I
 
 
     override fun save(contentDto: ContentDto): Content {
-        val content: Content  = FromDto().toEntity(contentDto)
+        val content: Content = FromDto().toEntity(contentDto)
         return runCatching { contentPersistence.save(content) }.getOrElse {
             throw OperationNotComplete("Error saving content", it)
         }

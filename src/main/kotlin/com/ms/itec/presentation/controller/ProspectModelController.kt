@@ -2,9 +2,10 @@ package com.ms.itec.presentation.controller
 
 import com.ms.itec.application.dto.request.ProspectModelDto
 import com.ms.itec.application.dto.request.ProspectModelWithIdDto
+import com.ms.itec.application.dto.request.ProspectModelWithOwnerId
 import com.ms.itec.application.dto.response.ResponseUpdateAndSaveDto
 import com.ms.itec.application.service.impl.ProspectModelServiceImpl
-import com.ms.itec.domain.entity.ProspectModel
+import com.ms.itec.domain.prospectModel.ProspectModel
 import com.ms.itec.presentation.mapper.FromEntity
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -72,6 +73,18 @@ class ProspectModelController(private val prospectService: ProspectModelServiceI
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
             prospectDto.map { prospectService.save(it) }
+        )
+    }
+    @PostMapping("/saveMultiWithOwner")
+    fun saveMultiWithOwnerId(@RequestBody prospectDto: List<ProspectModelWithOwnerId>): ResponseEntity<List<ProspectModel>> {
+
+//        prospectDto.forEach {
+//            prospectService.saveWithOwner(it)
+//        }
+
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+            prospectDto.map { prospectService.saveWithOwner(it) }
         )
     }
 }

@@ -13,4 +13,5 @@ data class ProspectResponseDto(
     var emailMarketing: Boolean = false,
     var contacted: Boolean = false,
     val createdAt: String = "",
+    val ownerId: String = ""
 )

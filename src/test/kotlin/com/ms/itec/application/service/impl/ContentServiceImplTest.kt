@@ -3,7 +3,7 @@ package com.ms.itec.application.service.impl
 import com.ms.itec.application.dto.request.ContentDto
 import com.ms.itec.application.dto.request.ContentDtoWithId
 import com.ms.itec.application.enums.Tag
-import com.ms.itec.entity.Content
+import com.ms.itec.domain.entity.content.Content
 import com.ms.itec.infrastructure.persistence.IContentPersistence
 import com.ms.itec.presentation.excepetion.OperationNotComplete
 import com.ms.itec.presentation.excepetion.RecordNotFound

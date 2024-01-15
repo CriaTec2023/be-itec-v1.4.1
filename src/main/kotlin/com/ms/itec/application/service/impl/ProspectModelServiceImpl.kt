@@ -2,10 +2,10 @@ package com.ms.itec.application.service.impl
 
 import com.ms.itec.application.dto.request.ProspectModelDto
 import com.ms.itec.application.dto.request.ProspectModelWithIdDto
-import com.ms.itec.application.dto.response.ProspectResponseDto
+import com.ms.itec.application.dto.request.ProspectModelWithOwnerId
 import com.ms.itec.application.enums.Polos
 import com.ms.itec.application.service.IProspectModelService
-import com.ms.itec.domain.entity.ProspectModel
+import com.ms.itec.domain.prospectModel.ProspectModel
 import com.ms.itec.infrastructure.persistence.IProspectModelPersistence
 import com.ms.itec.presentation.excepetion.OperationNotComplete
 import com.ms.itec.presentation.excepetion.RecordNotFound
@@ -28,8 +28,20 @@ class ProspectModelServiceImpl(private var prospectPersistence: IProspectModelPe
         val listOfProspects = prospectPersistence.getWithIdOwner(idOwner).orElseThrow {
                 throw RecordNotFound("ERROR GETTING PROSPECTS WITH 'OWNER ID': $idOwner ")
         }
+        val listResponse = listOfProspects.sortedByDescending { it.createdAt }
 
-        return listOfProspects.sortedByDescending { it.createdAt }
+        listResponse.forEach{
+            FromEntity().toDto(it)
+        }
+
+        return listResponse.sortedByDescending { it.createdAt }
+    }
+
+    override fun saveWithOwner(prospectModelDto: ProspectModelWithOwnerId): ProspectModel {
+        val prospectModel: ProspectModel = FromDto().toEntity(prospectModelDto)
+        return runCatching { prospectPersistence.save(prospectModel) }.getOrElse {
+            throw OperationNotComplete("ERROR SAVING: ", it)
+        }
     }
 
     override fun getWithoutOwner(): List<ProspectModel> {

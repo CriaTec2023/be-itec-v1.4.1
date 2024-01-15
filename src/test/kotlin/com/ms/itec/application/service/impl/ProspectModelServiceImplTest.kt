@@ -2,7 +2,7 @@ package com.ms.itec.application.service.impl
 
 import com.ms.itec.application.dto.request.ProspectModelDto
 import com.ms.itec.application.dto.request.ProspectModelWithIdDto
-import com.ms.itec.domain.entity.ProspectModel
+import com.ms.itec.domain.prospectModel.ProspectModel
 import com.ms.itec.infrastructure.persistence.IProspectModelPersistence
 import com.ms.itec.presentation.mapper.FromDto
 import org.junit.jupiter.api.Test
