@@ -23,4 +23,6 @@ interface IProspectModelPersistence: JpaRepository<ProspectModel, String>, Prosp
 
 //        fun getByOwnerIdEquals(ownerId: String): Optional<List<ProspectModel>>
 
+
+
 }

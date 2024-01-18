@@ -3,6 +3,7 @@ package com.ms.itec.presentation.mapper
 import com.ms.itec.application.dto.response.ProspectResponseDto
 import com.ms.itec.domain.prospectModel.ProspectModel
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -13,7 +14,7 @@ class FromEntity {
         return ProspectResponseDto(
             id = prospectModel.id,
             contacted = prospectModel.contacted,
-            createdAt = convertDate(prospectModel.createdAt.toString()).toString(),
+            createdAt = convertDate(prospectModel.createdAt).toString(),
             name = prospectModel.name,
             email = prospectModel.email,
             phone = prospectModel.phone,
@@ -27,9 +28,11 @@ class FromEntity {
 
     }
 
-    private fun  convertDate(date: String?): LocalDate {
+    private fun convertDate(date: String?): LocalDate {
         val brazil = Locale("pt", "BR")
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd").withLocale(brazil)
-        return LocalDate.parse(date, formatter)
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS").withLocale(brazil)
+        val localDateTime = LocalDateTime.parse(date, formatter)
+        return localDateTime.toLocalDate()
     }
+
 }

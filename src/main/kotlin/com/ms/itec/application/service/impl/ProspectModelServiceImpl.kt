@@ -100,6 +100,18 @@ class ProspectModelServiceImpl(private var prospectPersistence: IProspectModelPe
         }
         return prospectPersistence.save(prospectRecord)
     }
+
+    override fun updateDate(): List<ProspectModel> {
+        val listOfProspects = prospectPersistence.findAll()
+
+        listOfProspects.forEach {
+            it.createdAt = "2021-08-01T00:00:00.000000"
+            prospectPersistence.save(it)
+        }
+
+        return listOfProspects
+    }
+
     private fun areProspectModelsEqual(prospectModel: ProspectModel, prospectModelDto: ProspectModelWithIdDto): Boolean {
         return Objects.equals(prospectModel.name, prospectModelDto.name) &&
                 Objects.equals(prospectModel.email, prospectModelDto.email) &&
@@ -109,5 +121,8 @@ class ProspectModelServiceImpl(private var prospectPersistence: IProspectModelPe
                 Objects.equals(prospectModel.cupom, prospectModelDto.cupom) &&
                 Objects.equals(prospectModel.emailMarketing, prospectModelDto.emailMarketing)
     }
+
+
+
 
 }

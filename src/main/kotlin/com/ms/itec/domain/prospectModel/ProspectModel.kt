@@ -22,7 +22,7 @@ data class ProspectModel(
     var cupom: String= "",
     var emailMarketing: Boolean = false,
     var contacted: Boolean = false,
-    val createdAt: String = LocalDateTime.now().toString(),
+    var createdAt: String = LocalDateTime.now().toString(),
     var updatedAt: LocalDateTime = LocalDateTime.now()
 
     )

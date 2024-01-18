@@ -6,6 +6,7 @@ import com.ms.itec.application.dto.request.ProspectModelWithOwnerId
 import com.ms.itec.application.dto.response.ResponseUpdateAndSaveDto
 import com.ms.itec.application.service.impl.ProspectModelServiceImpl
 import com.ms.itec.domain.prospectModel.ProspectModel
+import com.ms.itec.infrastructure.persistence.IProspectModelPersistence
 import com.ms.itec.presentation.mapper.FromEntity
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -63,28 +64,46 @@ class ProspectModelController(private val prospectService: ProspectModelServiceI
         )
     }
 
-    @PostMapping("/saveMulti")
-    fun saveMulti(@RequestBody prospectDto: List<ProspectModelDto>): ResponseEntity<List<ProspectModel>> {
-
-        prospectDto.forEach {
-            prospectService.save(it)
-        }
-
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(
-            prospectDto.map { prospectService.save(it) }
+    @PostMapping("/updateContacted/{idProspect}/{idOwner}")
+    fun updateContacted(@PathVariable idProspect: String, @PathVariable idOwner:String): ResponseEntity<ResponseUpdateAndSaveDto> {
+        val response =  prospectService.updateContacted(idProspect, idOwner)
+        return ResponseEntity.status(HttpStatus.OK).body(
+            ResponseUpdateAndSaveDto( "'SUCCESSFULLY UPDATED':","Prospect Update: ${response.name} update prospect with id: ${response.id}")
         )
     }
-    @PostMapping("/saveMultiWithOwner")
-    fun saveMultiWithOwnerId(@RequestBody prospectDto: List<ProspectModelWithOwnerId>): ResponseEntity<List<ProspectModel>> {
 
+//    @PostMapping("/saveMulti")
+//    fun saveMulti(@RequestBody prospectDto: List<ProspectModelDto>): ResponseEntity<List<ProspectModel>> {
+//
 //        prospectDto.forEach {
-//            prospectService.saveWithOwner(it)
+//            prospectService.save(it)
 //        }
-
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(
-            prospectDto.map { prospectService.saveWithOwner(it) }
-        )
-    }
+//
+//
+//        return ResponseEntity.status(HttpStatus.CREATED).body(
+//            prospectDto.map { prospectService.save(it) }
+//        )
+//    }
+//    @PostMapping("/saveMultiWithOwner")
+//    fun saveMultiWithOwnerId(@RequestBody prospectDto: List<ProspectModelWithOwnerId>): ResponseEntity<List<ProspectModel>> {
+//
+////        prospectDto.forEach {
+////            prospectService.saveWithOwner(it)
+////        }
+//
+//
+//        return ResponseEntity.status(HttpStatus.CREATED).body(
+//            prospectDto.map { prospectService.saveWithOwner(it) }
+//        )
+//    }
+//
+//    @PostMapping("/chageDate")
+//    fun chageDate(): ResponseEntity<List<ProspectModel>> {
+//
+//
+//
+//        return ResponseEntity.status(HttpStatus.CREATED).body(
+//            prospectService.updateDate()
+//        )
+//    }
 }

@@ -10,7 +10,6 @@ import com.ms.itec.domain.entity.IdentifierProducer
 import com.ms.itec.domain.entity.content.Content
 import com.ms.itec.domain.prospectModel.ProspectModel
 import jakarta.validation.Valid
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -43,7 +42,7 @@ class FromDto {
             emailMarketing = dto.emailMarketing,
             contacted = false,
             ownerId = "",
-            createdAt = LocalDateTime.now().toString(),
+            createdAt = convertDate(LocalDateTime.now()).toString(),
             updatedAt =  LocalDateTime.parse(LocalDateTime.now().toString(), DateTimeFormatter.ISO_DATE_TIME)
 
         )
@@ -108,10 +107,12 @@ class FromDto {
         }
     }
 
-//    private fun  convertDate(date: String?): LocalDateTime {
-//        val brazil = Locale("pt", "BR")
-//        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd").withLocale(brazil)
-//        return LocalDate.parse(date, formatter)
-//    }
+    fun convertDate(date: LocalDateTime): String {
+        val brazil = Locale("pt", "BR")
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS").withLocale(brazil)
+        val newDate = LocalDateTime.parse(date.toString(), formatter).toString()
+        // Assuming date is not null, you might want to handle null cases
+        return newDate
+    }
 }
 
