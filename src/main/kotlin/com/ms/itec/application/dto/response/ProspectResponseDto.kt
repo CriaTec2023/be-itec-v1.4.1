@@ -9,7 +9,7 @@ data class ProspectResponseDto(
     var phone: String= "",
     var polo :String = "",
     var course: String = "",
-    var cupom: String = "",
+    var cupom: String? = "",
     var emailMarketing: Boolean = false,
     var contacted: Boolean = false,
     val createdAt: String = "",

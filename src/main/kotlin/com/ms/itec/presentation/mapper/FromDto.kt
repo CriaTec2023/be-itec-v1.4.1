@@ -42,7 +42,7 @@ class FromDto {
             emailMarketing = dto.emailMarketing,
             contacted = false,
             ownerId = "",
-            createdAt = convertDate(LocalDateTime.now()).toString(),
+            createdAt = creatDate(),
             updatedAt =  LocalDateTime.parse(LocalDateTime.now().toString(), DateTimeFormatter.ISO_DATE_TIME)
 
         )
@@ -89,30 +89,26 @@ class FromDto {
     fun formatBrazilianPhoneNumber(input: String): String {
         // Remove todos os caracteres não numéricos
         val cleanedInput = input.replace("\\D".toRegex(), "")
-
         // Verifica se o número tem o formato esperado (DDD + 9 dígitos)
         return if (cleanedInput.length in 10..11) {
             // Extrai o DDD e o número de telefone
             val ddd = cleanedInput.substring(0, 2)
+            println("DDD: $ddd")
             val phoneNumber = cleanedInput.substring(2)
-
             // Formata o número
             return when (cleanedInput.length) {
-                10 -> "(0$ddd) $phoneNumber" // Sem o nono dígito
+                 10-> "(0$ddd) $phoneNumber" // Sem o nono dígit
                 11 -> "($ddd) $phoneNumber" // Com o nono dígito
                 else -> cleanedInput
             }
         } else {
-            cleanedInput
+            input
         }
     }
 
-    fun convertDate(date: LocalDateTime): String {
+    private fun creatDate(): String {
         val brazil = Locale("pt", "BR")
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS").withLocale(brazil)
-        val newDate = LocalDateTime.parse(date.toString(), formatter).toString()
-        // Assuming date is not null, you might want to handle null cases
-        return newDate
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS").withLocale(brazil))
     }
 }
 

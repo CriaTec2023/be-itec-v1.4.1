@@ -19,7 +19,7 @@ data class ProspectModel(
     var phone: String= "",
     var polo: Polos? = Polos.UNDECIDED,
     var course: String= "",
-    var cupom: String= "",
+    var cupom: String?= "",
     var emailMarketing: Boolean = false,
     var contacted: Boolean = false,
     var createdAt: String = LocalDateTime.now().toString(),

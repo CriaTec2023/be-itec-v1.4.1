@@ -18,7 +18,7 @@ data class ProspectModelDto(
     var polo : String?,
     @field:NotBlank(message = "O campo curso é obrigatório")
     var course: String = "",
-    var cupom: String = "",
+    var cupom: String? = "",
     var emailMarketing: Boolean = false,
 
 )

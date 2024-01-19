@@ -17,7 +17,9 @@ import java.util.*
 @Service
 class ProspectModelServiceImpl(private var prospectPersistence: IProspectModelPersistence): IProspectModelService{
     override fun save(prospectModelDto: ProspectModelDto): ProspectModel {
+
         val prospectModel: ProspectModel = FromDto().toEntity(prospectModelDto)
+
         return runCatching { prospectPersistence.save(prospectModel) }.getOrElse {
             throw OperationNotComplete("ERROR SAVING: ", it)
         }
