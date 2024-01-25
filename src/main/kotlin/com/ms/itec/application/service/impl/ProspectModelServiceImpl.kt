@@ -12,6 +12,7 @@ import com.ms.itec.presentation.excepetion.RecordNotFound
 import com.ms.itec.presentation.mapper.FromDto
 import com.ms.itec.presentation.mapper.FromEntity
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 import java.util.*
 
 @Service
@@ -68,15 +69,10 @@ class ProspectModelServiceImpl(private var prospectPersistence: IProspectModelPe
             prospectModel.course = prospectModelDto.course
             prospectModel.cupom = prospectModelDto.cupom
             prospectModel.emailMarketing = prospectModelDto.emailMarketing
-
-            // Adicione logs para debug
-            println("Objeto antes do save: $prospectModel")
-
+            prospectModel.updatedAt = LocalDateTime.now()
             // Salvar fora do bloco if
             prospectPersistence.save(prospectModel)
 
-            // Adicione logs para debug
-            println("Objeto após o save: $prospectModel")
         }
 
         return prospectModel
@@ -99,20 +95,21 @@ class ProspectModelServiceImpl(private var prospectPersistence: IProspectModelPe
         prospectRecord.apply {
             ownerId = idOwner
             contacted = true
+            updatedAt = LocalDateTime.now()
         }
         return prospectPersistence.save(prospectRecord)
     }
 
-    override fun updateDate(): List<ProspectModel> {
-        val listOfProspects = prospectPersistence.findAll()
-
-        listOfProspects.forEach {
-            it.createdAt = "2021-08-01T00:00:00.000000"
-            prospectPersistence.save(it)
-        }
-
-        return listOfProspects
-    }
+//    override fun updateDate(): List<ProspectModel> {
+//        val listOfProspects = prospectPersistence.findAll()
+//
+//        listOfProspects.forEach {
+//            it.createdAt = "2021-08-01T00:00:00.000000"
+//            prospectPersistence.save(it)
+//        }
+//
+//        return listOfProspects
+//    }
 
     private fun areProspectModelsEqual(prospectModel: ProspectModel, prospectModelDto: ProspectModelWithIdDto): Boolean {
         return Objects.equals(prospectModel.name, prospectModelDto.name) &&
