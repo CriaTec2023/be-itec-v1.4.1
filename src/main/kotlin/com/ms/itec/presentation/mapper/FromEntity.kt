@@ -1,7 +1,7 @@
 package com.ms.itec.presentation.mapper
 
 import com.ms.itec.application.dto.response.ProspectResponseDto
-import com.ms.itec.domain.prospectModel.ProspectModel
+import com.ms.itec.domain.entity.prospectModel.ProspectModel
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter

@@ -3,7 +3,7 @@ package com.ms.itec.application.service
 import com.ms.itec.application.dto.request.ProspectModelDto
 import com.ms.itec.application.dto.request.ProspectModelWithIdDto
 import com.ms.itec.application.dto.request.ProspectModelWithOwnerId
-import com.ms.itec.domain.prospectModel.ProspectModel
+import com.ms.itec.domain.entity.prospectModel.ProspectModel
 
 interface IProspectModelService {
 

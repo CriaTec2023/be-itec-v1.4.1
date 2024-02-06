@@ -5,7 +5,7 @@ import com.ms.itec.application.dto.request.ProspectModelWithIdDto
 import com.ms.itec.application.dto.request.ProspectModelWithOwnerId
 import com.ms.itec.application.dto.response.ResponseUpdateAndSaveDto
 import com.ms.itec.application.service.impl.ProspectModelServiceImpl
-import com.ms.itec.domain.prospectModel.ProspectModel
+import com.ms.itec.domain.entity.prospectModel.ProspectModel
 import com.ms.itec.infrastructure.persistence.IProspectModelPersistence
 import com.ms.itec.presentation.mapper.FromEntity
 import org.springframework.http.HttpStatus

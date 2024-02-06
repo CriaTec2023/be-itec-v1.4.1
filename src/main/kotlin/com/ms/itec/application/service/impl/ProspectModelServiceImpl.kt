@@ -5,7 +5,7 @@ import com.ms.itec.application.dto.request.ProspectModelWithIdDto
 import com.ms.itec.application.dto.request.ProspectModelWithOwnerId
 import com.ms.itec.application.enums.Polos
 import com.ms.itec.application.service.IProspectModelService
-import com.ms.itec.domain.prospectModel.ProspectModel
+import com.ms.itec.domain.entity.prospectModel.ProspectModel
 import com.ms.itec.infrastructure.persistence.IProspectModelPersistence
 import com.ms.itec.presentation.excepetion.OperationNotComplete
 import com.ms.itec.presentation.excepetion.RecordNotFound
@@ -72,7 +72,6 @@ class ProspectModelServiceImpl(private var prospectPersistence: IProspectModelPe
             prospectModel.updatedAt = LocalDateTime.now()
             // Salvar fora do bloco if
             prospectPersistence.save(prospectModel)
-
         }
 
         return prospectModel

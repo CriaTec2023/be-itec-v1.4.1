@@ -1,4 +1,4 @@
-package com.ms.itec.domain.prospectModel
+package com.ms.itec.domain.entity.prospectModel
 
 import com.ms.itec.application.enums.Polos
 import com.ms.itec.domain.entity.IdentifierProducer
