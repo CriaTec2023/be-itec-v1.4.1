@@ -11,7 +11,7 @@ import java.time.LocalDateTime
 
 @Entity
 data class ProspectModel(
-    @Id @GeneratedValue(strategy = GenerationType.UUID)
+    @Id
     val id: String = IdentifierProducer().creatIndentification(),
     var ownerId: String = "",
     var name: String = "",

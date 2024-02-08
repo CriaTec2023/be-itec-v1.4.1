@@ -7,7 +7,7 @@ import java.util.*
 
 @Entity
 data class Content(
-    @Id @GeneratedValue(strategy = GenerationType.UUID)
+    @Id
     var id: String = IdentifierProducer().creatIndentification(),
     @Enumerated(EnumType.STRING)
     var tag: Tag,
