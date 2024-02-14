@@ -1,13 +1,11 @@
 package com.ms.itec.presentation.mapper
 
-import com.ms.itec.application.dto.request.ContentDto
-import com.ms.itec.application.dto.request.ProspectModelDto
-import com.ms.itec.application.dto.request.ProspectModelWithIdDto
-import com.ms.itec.application.dto.request.ProspectModelWithOwnerId
+import com.ms.itec.application.dto.request.*
 import com.ms.itec.application.enums.Polos
 import com.ms.itec.application.enums.Tag
 import com.ms.itec.domain.entity.IdentifierProducer
 import com.ms.itec.domain.entity.content.Content
+import com.ms.itec.domain.entity.employee.EmployeeModel
 import com.ms.itec.domain.entity.prospectModel.ProspectModel
 import jakarta.validation.Valid
 import java.time.LocalDateTime
@@ -16,14 +14,28 @@ import java.util.*
 
 
 class FromDto {
-    fun toEntity(@Valid dto: ContentDto): Content {
 
+
+    fun toEntity(dto: CurriculoDto, uriCurriculo: String): EmployeeModel {
+        return EmployeeModel(
+            id = IdentifierProducer().creatIndentification(),
+            name = dto.name.trim(),
+            email = dto.email.trim(),
+            phone = formatBrazilianPhoneNumber(dto.phone),
+            setor = dto.setor.trim(),
+            curriculoFileLink = uriCurriculo,
+            lgpd = dto.lgpd,
+            timeOfExperience = dto.timeOfExperience,
+        )
+    }
+
+    fun toEntity(@Valid dto: ContentDto): Content {
         return Content(
-            id = UUID.randomUUID().toString(),
-            title = dto.title,
-            description = dto.description,
-            content = dto.content,
-            background = dto.background,
+            id = IdentifierProducer().creatIndentification(),
+            title = dto.title.trim(),
+            description = dto.description.trim(),
+            content = dto.content.trim(),
+            background = dto.background.trim(),
             tag = Tag.valueOf(dto.tag.trim()),
             avgSalary = dto.avgSalary
         )
@@ -32,7 +44,7 @@ class FromDto {
     fun toEntity(@Valid dto: ProspectModelDto): ProspectModel {
 
         return ProspectModel(
-            id = UUID.randomUUID().toString(),
+            id = IdentifierProducer().creatIndentification(),
             name = dto.name.trim(),
             email = dto.email.trim(),
             phone = formatBrazilianPhoneNumber(dto.phone),

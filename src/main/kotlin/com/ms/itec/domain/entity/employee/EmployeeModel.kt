@@ -14,6 +14,7 @@ data class EmployeeModel(
     var phone:String = "",
     var setor:String = "",
     var curriculoFileLink: String = "",
-    var lgpd:Boolean = false
+    var lgpd:Boolean = false,
+    var timeOfExperience : String
 
 )

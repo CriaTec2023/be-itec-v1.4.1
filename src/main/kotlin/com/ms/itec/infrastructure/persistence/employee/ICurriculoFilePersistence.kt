@@ -8,15 +8,8 @@ import org.springframework.stereotype.Repository
 
 @Repository
 @Transactional
-interface ICurriloFilePersistence: JpaRepository<CurriculoFile, String>, ICurriloFileRepository {
+interface ICurriculoFilePersistence: JpaRepository<CurriculoFile, String>, ICurriloFileRepository {
 
-    override fun saveCurriculoFile(file: CurriculoFile): String {
-        return save(file).name
-    }
-
-    override fun deleteCurriculoFile() {
-        deleteAll()
-    }
 
     override fun findCurriculoFileByLink(link: String): CurriculoFile {
         return findById(link).get()
