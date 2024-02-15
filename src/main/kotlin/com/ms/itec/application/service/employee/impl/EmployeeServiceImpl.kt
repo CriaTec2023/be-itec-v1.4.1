@@ -7,6 +7,8 @@ import com.ms.itec.infrastructure.persistence.employee.IEmployeePersistence
 import com.ms.itec.presentation.excepetion.OperationNotComplete
 import com.ms.itec.presentation.excepetion.RecordNotFound
 import com.ms.itec.presentation.mapper.FromDto
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
@@ -43,6 +45,11 @@ data class EmployeeServiceImpl(private val curriculoFileServiceImpl: CurriculoFi
         }
     }
 
+    override fun findAll(pageable: Pageable): Page<EmployeeModel> {
+        return runCatching { employeePersistence.findAll(pageable) }.getOrElse {
+            throw OperationNotComplete("Error getting all employees", it)
+        }
+    }
 
 
 }

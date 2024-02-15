@@ -1,10 +1,12 @@
 package com.ms.itec.presentation.controller.employee
 
 import com.ms.itec.application.dto.request.CurriculoDto
-import com.ms.itec.application.service.employee.ICurriculoFileService
+import com.ms.itec.application.dto.response.DtoResponse
 import com.ms.itec.application.service.employee.impl.CurriculoFileServiceImpl
 import com.ms.itec.application.service.employee.impl.EmployeeServiceImpl
+import com.ms.itec.presentation.mapper.FromEntity
 import org.springframework.core.io.ByteArrayResource
+import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -19,26 +21,44 @@ const val MULTIPART_FORM_DATA = "multipart/form-data"
 class CurriculoFileController(private val curriculoFileService: CurriculoFileServiceImpl, private val employeeService: EmployeeServiceImpl){
 
     @PostMapping("/upload")
-    fun uploadCurriculo(curriculoDto: CurriculoDto): ResponseEntity<Any> {
+    fun uploadCurriculo(
+        @RequestParam("file") file: MultipartFile,
+        @RequestParam("name") name: String,
+        @RequestParam("email") email: String,
+        @RequestParam("polo") polo: String,
+        @RequestParam("phone") phone: String,
+        @RequestParam("setor") setor: String,
+        @RequestParam("lgpd") lgpd: Boolean,
+        @RequestParam("timeOfExperience") timeOfExperience: String
+    ): ResponseEntity<Any> {
         return try {
+            val curriculoDto = CurriculoDto(
+                name = name,
+                email = email,
+                polo = polo,
+                phone = phone,
+                setor = setor,
+                curriculoFile = file,
+                lgpd = lgpd,
+                timeOfExperience = timeOfExperience
+            )
             employeeService.saveEmployeeModel(curriculoDto)
+            val response = DtoResponse(
+                status = 200,
+                sucess = true,
+                error = "",
+            )
 
-            ResponseEntity.ok().body("File uploaded successfully.")
+            ResponseEntity.ok().body(response)
         } catch (e: Exception) {
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error uploading file: ${e.message}")
+            val response = DtoResponse(
+                status = 400,
+                sucess = false,
+                error = e.message!!.toString(),
+            )
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response)
         }
     }
-
-    @GetMapping("employee")
-    fun getAllEmployeeModels(): ResponseEntity<Any> {
-        return try {
-            val employees = employeeService.getAllEmployeeModels()
-            ResponseEntity.ok().body(employees)
-        } catch (e: Exception) {
-            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error getting all employees: ${e.message}")
-        }
-    }
-
 
     @PostMapping("/uploadCurriculo", consumes = [MULTIPART_FORM_DATA])
     fun uploadFile(@RequestParam("file") file: MultipartFile): ResponseEntity<Any> {
@@ -49,6 +69,27 @@ class CurriculoFileController(private val curriculoFileService: CurriculoFileSer
             ResponseEntity.ok().body("File uploaded successfully. Download URI: $downloadUri")
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading file: ${e.message}")
+        }
+    }
+
+    @GetMapping("/employee")
+    fun getAllEmployeeModels(): ResponseEntity<Any> {
+        return try {
+            val employees = employeeService.getAllEmployeeModels().map { FromEntity().toDto(it) }
+            ResponseEntity.ok().body(employees)
+        } catch (e: Exception) {
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error getting all employees: ${e.message}")
+        }
+    }
+
+
+    @GetMapping("/employee/page")
+    fun getEmployeePage(pegeable: Pageable): ResponseEntity<Any> {
+        return try {
+            val employees = employeeService.findAll(pegeable).map {FromEntity().toDto(it)}
+            ResponseEntity.ok().body(employees)
+        } catch (e: Exception) {
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error getting all employees: ${e.message}")
         }
     }
 

@@ -23,6 +23,7 @@ class FromDto {
             email = dto.email.trim(),
             phone = formatBrazilianPhoneNumber(dto.phone),
             setor = dto.setor.trim(),
+            polo  = dto.polo.trim(),
             curriculoFileLink = uriCurriculo,
             lgpd = dto.lgpd,
             timeOfExperience = dto.timeOfExperience,
@@ -105,7 +106,7 @@ class FromDto {
         return if (cleanedInput.length in 10..11) {
             // Extrai o DDD e o número de telefone
             val ddd = cleanedInput.substring(0, 2)
-            println("DDD: $ddd")
+
             val phoneNumber = cleanedInput.substring(2)
             // Formata o número
             return when (cleanedInput.length) {

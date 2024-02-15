@@ -13,4 +13,6 @@ interface IEmployeePersistence: JpaRepository<EmployeeModel, String>, IEmployeeM
     override fun getEmployeeBySetor(setor: String): List<EmployeeModel>
 
 
+
+
 }
