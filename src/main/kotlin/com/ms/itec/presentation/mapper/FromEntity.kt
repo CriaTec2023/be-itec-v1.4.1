@@ -26,6 +26,7 @@ class FromEntity {
             emailMarketing = prospectModel.emailMarketing,
             ownerId = prospectModel.ownerId,
 
+
         )
 
     }
@@ -39,7 +40,9 @@ class FromEntity {
             setor = employee.setor,
             curriculoFileLink = employee.curriculoFileLink,
             lgpd = employee.lgpd,
-            timeOfExperience = employee.timeOfExperience
+            timeOfExperience = employee.timeOfExperience,
+            createdAt = convertDate(employee.createdAt).toString()
+
         )
     }
 

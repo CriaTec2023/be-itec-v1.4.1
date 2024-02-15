@@ -3,6 +3,7 @@ package com.ms.itec.domain.entity.employee
 import com.ms.itec.domain.entity.IdentifierProducer
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
+import java.time.LocalDateTime
 
 @Entity
 data class EmployeeModel(
@@ -15,6 +16,7 @@ data class EmployeeModel(
     var setor:String = "",
     var curriculoFileLink: String = "",
     var lgpd:Boolean = false,
-    var timeOfExperience : String
+    var timeOfExperience : String,
+    var createdAt : String = LocalDateTime.now().toString(),
 
-)
+    )

@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile
 
 const val MULTIPART_FORM_DATA = "multipart/form-data"
 @Controller
-@RequestMapping("v1/employee")
+@RequestMapping("v1/employees")
 class CurriculoFileController(private val curriculoFileService: CurriculoFileServiceImpl, private val employeeService: EmployeeServiceImpl){
 
     @PostMapping("/upload")
@@ -60,7 +60,7 @@ class CurriculoFileController(private val curriculoFileService: CurriculoFileSer
         }
     }
 
-    @PostMapping("/uploadCurriculo", consumes = [MULTIPART_FORM_DATA])
+    @PostMapping("/uploadFile", consumes = [MULTIPART_FORM_DATA])
     fun uploadFile(@RequestParam("file") file: MultipartFile): ResponseEntity<Any> {
         return try {
             val fileIdentification = curriculoFileService.saveCurriculoFile(file)
@@ -72,7 +72,7 @@ class CurriculoFileController(private val curriculoFileService: CurriculoFileSer
         }
     }
 
-    @GetMapping("/employee")
+    @GetMapping("/all")
     fun getAllEmployeeModels(): ResponseEntity<Any> {
         return try {
             val employees = employeeService.getAllEmployeeModels().map { FromEntity().toDto(it) }
@@ -83,7 +83,7 @@ class CurriculoFileController(private val curriculoFileService: CurriculoFileSer
     }
 
 
-    @GetMapping("/employee/page")
+    @GetMapping("/page")
     fun getEmployeePage(pegeable: Pageable): ResponseEntity<Any> {
         return try {
             val employees = employeeService.findAll(pegeable).map {FromEntity().toDto(it)}

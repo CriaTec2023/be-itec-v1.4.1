@@ -27,6 +27,7 @@ class FromDto {
             curriculoFileLink = uriCurriculo,
             lgpd = dto.lgpd,
             timeOfExperience = dto.timeOfExperience,
+            createdAt = creatDate()
         )
     }
 
