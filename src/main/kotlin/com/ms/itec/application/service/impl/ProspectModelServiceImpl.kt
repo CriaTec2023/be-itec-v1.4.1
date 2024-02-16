@@ -99,6 +99,8 @@ class ProspectModelServiceImpl(private var prospectPersistence: IProspectModelPe
         return prospectPersistence.save(prospectRecord)
     }
 
+
+
 //    override fun updateDate(): List<ProspectModel> {
 //        val listOfProspects = prospectPersistence.findAll()
 //

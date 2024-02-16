@@ -1,6 +1,8 @@
 package com.ms.itec.presentation.mapper
 
+import com.ms.itec.application.dto.response.EmployeeModelDto
 import com.ms.itec.application.dto.response.ProspectResponseDto
+import com.ms.itec.domain.entity.employee.EmployeeModel
 import com.ms.itec.domain.entity.prospectModel.ProspectModel
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -24,8 +26,24 @@ class FromEntity {
             emailMarketing = prospectModel.emailMarketing,
             ownerId = prospectModel.ownerId,
 
+
         )
 
+    }
+    fun toDto(employee:EmployeeModel): EmployeeModelDto {
+        return EmployeeModelDto(
+            id = employee.id,
+            name = employee.name,
+            email = employee.email,
+            polo = employee.polo,
+            phone = employee.phone,
+            setor = employee.setor,
+            curriculoFileLink = employee.curriculoFileLink,
+            lgpd = employee.lgpd,
+            timeOfExperience = employee.timeOfExperience,
+            createdAt = convertDate(employee.createdAt).toString()
+
+        )
     }
 
     private fun convertDate(date: String?): LocalDate {

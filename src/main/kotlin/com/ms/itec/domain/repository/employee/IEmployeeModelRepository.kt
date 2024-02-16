@@ -2,13 +2,13 @@ package com.ms.itec.domain.repository.employee
 
 import com.ms.itec.domain.entity.employee.EmployeeModel
 
+
 interface IEmployeeModelRepository {
 
-    fun saveEmployeeModel(employee: EmployeeModel): EmployeeModel
+    fun getEmployeeBySetor(setor: String): List<EmployeeModel>
 
-    fun deleteEmployeeModelById(id: String)
 
-    fun findEmployeeModelById(id: String): EmployeeModel
+    fun search(polo: String?, timeOfExperience: String?, setor: String?): List<EmployeeModel>
 
-    fun updateEmployeeModel(employee: EmployeeModel): EmployeeModel
+
 }
