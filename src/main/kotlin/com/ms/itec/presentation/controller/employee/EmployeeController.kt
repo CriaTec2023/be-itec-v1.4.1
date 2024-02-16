@@ -72,15 +72,15 @@ class CurriculoFileController(private val curriculoFileService: CurriculoFileSer
         }
     }
 
-    @GetMapping("/all")
-    fun getAllEmployeeModels(): ResponseEntity<Any> {
-        return try {
-            val employees = employeeService.getAllEmployeeModels().map { FromEntity().toDto(it) }
-            ResponseEntity.ok().body(employees)
-        } catch (e: Exception) {
-            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error getting all employees: ${e.message}")
-        }
-    }
+//    @GetMapping("/all")
+//    fun getAllEmployeeModels(): ResponseEntity<Any> {
+//        return try {
+//            val employees = employeeService.getAllEmployeeModels().map { FromEntity().toDto(it) }
+//            ResponseEntity.ok().body(employees)
+//        } catch (e: Exception) {
+//            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error getting all employees: ${e.message}")
+//        }
+//    }
 
 
     @GetMapping("/page")
@@ -109,5 +109,22 @@ class CurriculoFileController(private val curriculoFileService: CurriculoFileSer
             .contentType(MediaType.APPLICATION_OCTET_STREAM)
             .headers(headers)
             .body(resource)
+    }
+
+    @GetMapping("/search")
+    fun getSearch(
+            @RequestParam(required = false) polo: String?,
+            @RequestParam(required = false) timeOfExperience: String?,
+            @RequestParam(required = false) setor: String?,
+                  ): ResponseEntity<Any> {
+        return try {
+            val employees =
+                    employeeService.search(polo, timeOfExperience, setor)
+                    .sortedByDescending { it.createdAt }
+
+            ResponseEntity.ok().body(employees)
+        } catch (e: Exception) {
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error getting all employees: ${e.message}")
+        }
     }
 }
