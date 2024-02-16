@@ -19,5 +19,4 @@ interface IEmployeePersistence: JpaRepository<EmployeeModel, String>, IEmployeeM
             @Param("timeOfExperience") timeOfExperience: String?,
             @Param("setor") setor: String?
     ): List<EmployeeModel>
-
 }

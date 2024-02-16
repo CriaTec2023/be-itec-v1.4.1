@@ -3,8 +3,6 @@ package com.ms.itec.domain.entity.prospectModel
 import com.ms.itec.application.enums.Polos
 import com.ms.itec.domain.entity.IdentifierProducer
 import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import java.time.LocalDateTime
 
