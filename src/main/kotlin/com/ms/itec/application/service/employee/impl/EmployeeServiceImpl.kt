@@ -1,12 +1,14 @@
 package com.ms.itec.application.service.employee.impl
 
 import com.ms.itec.application.dto.request.CurriculoDto
+import com.ms.itec.application.dto.response.EmployeeModelDto
 import com.ms.itec.application.service.employee.IEmployeeModelService
 import com.ms.itec.domain.entity.employee.EmployeeModel
 import com.ms.itec.infrastructure.persistence.employee.IEmployeePersistence
 import com.ms.itec.presentation.excepetion.OperationNotComplete
 import com.ms.itec.presentation.excepetion.RecordNotFound
 import com.ms.itec.presentation.mapper.FromDto
+import com.ms.itec.presentation.mapper.FromEntity
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -49,6 +51,14 @@ data class EmployeeServiceImpl(private val curriculoFileServiceImpl: CurriculoFi
         return runCatching { employeePersistence.findAll(pageable) }.getOrElse {
             throw OperationNotComplete("Error getting all employees", it)
         }
+    }
+
+    override fun search(polo: String?, timeOfExperience: String?, setor: String?): List<EmployeeModelDto> {
+
+        val employees = employeePersistence.search(polo, timeOfExperience, setor).map { FromEntity().toDto(it) }
+
+        return employees
+
     }
 
 
