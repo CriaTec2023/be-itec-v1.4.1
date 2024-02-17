@@ -1,3 +1,3 @@
 package com.ms.itec.presentation.excepetion
 
-class RecordNotFound(String: String, cause: Throwable? = null) : RuntimeException(String, cause)
+class RecordNotFound(message: String, cause: Throwable? = null) : RuntimeException(message, cause)

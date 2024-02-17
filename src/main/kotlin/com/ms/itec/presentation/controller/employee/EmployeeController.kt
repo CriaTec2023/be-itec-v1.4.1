@@ -83,16 +83,22 @@ class CurriculoFileController(private val curriculoFileService: CurriculoFileSer
 //    }
 
 
-    @GetMapping("/page")
-    fun getEmployeePage(pegeable: Pageable): ResponseEntity<Any> {
+    @GetMapping("/content")
+    fun getEmployeePage(pageable: Pageable): ResponseEntity<Any> {
         return try {
-            val employees = employeeService.findAll(pegeable).map {FromEntity().toDto(it)}
-            ResponseEntity.ok().body(employees)
+            // Chame a função findAll do serviço para obter a página de funcionários
+            val employeesPage = employeeService.findAll(pageable)
+
+            // Mapeie os funcionários para DTOs, se necessário
+            val employeesDtoPage = employeesPage.map { FromEntity().toDto(it) }
+
+            // Retorne a página de funcionários DTO na resposta
+            ResponseEntity.ok().body(employeesDtoPage)
         } catch (e: Exception) {
+            // Em caso de erro, retorne uma resposta de erro com o status 500
             ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error getting all employees: ${e.message}")
         }
     }
-
     @GetMapping("/download/{fileId}")
     fun downloadFile(@PathVariable fileId: String): ResponseEntity<ByteArrayResource> {
         // Retrieve the file from the database using the fileId

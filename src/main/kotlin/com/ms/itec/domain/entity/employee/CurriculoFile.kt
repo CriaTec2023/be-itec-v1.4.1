@@ -4,7 +4,6 @@ import com.ms.itec.domain.entity.IdentifierProducer
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Lob
-import lombok.EqualsAndHashCode
 
 @Entity
 data class CurriculoFile(

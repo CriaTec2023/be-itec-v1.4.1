@@ -48,9 +48,9 @@ data class EmployeeServiceImpl(private val curriculoFileServiceImpl: CurriculoFi
     }
 
     override fun findAll(pageable: Pageable): Page<EmployeeModel> {
-        return runCatching { employeePersistence.findAll(pageable) }.getOrElse {
-            throw OperationNotComplete("Error getting all employees", it)
-        }
+        // para realizar a consulta paginada no banco de dados
+        return employeePersistence.findAll(pageable)
+
     }
 
     override fun search(polo: String?, timeOfExperience: String?, setor: String?): List<EmployeeModelDto> {
