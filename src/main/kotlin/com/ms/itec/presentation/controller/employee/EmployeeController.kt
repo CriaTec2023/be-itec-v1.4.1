@@ -4,6 +4,7 @@ import com.ms.itec.application.dto.request.CurriculoDto
 import com.ms.itec.application.dto.response.DtoResponse
 import com.ms.itec.application.service.employee.impl.CurriculoFileServiceImpl
 import com.ms.itec.application.service.employee.impl.EmployeeServiceImpl
+import com.ms.itec.application.service.impl.AuthServiceImpl
 import com.ms.itec.presentation.mapper.FromEntity
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.data.domain.Pageable
@@ -11,14 +12,13 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 
 const val MULTIPART_FORM_DATA = "multipart/form-data"
-@Controller
+@RestController
 @RequestMapping("v1/employees")
-class CurriculoFileController(private val curriculoFileService: CurriculoFileServiceImpl, private val employeeService: EmployeeServiceImpl){
+class CurriculoFileController(private val auth: AuthServiceImpl, private val curriculoFileService: CurriculoFileServiceImpl, private val employeeService: EmployeeServiceImpl){
 
     @PostMapping("/upload")
     fun uploadCurriculo(
@@ -84,8 +84,13 @@ class CurriculoFileController(private val curriculoFileService: CurriculoFileSer
 
 
     @GetMapping("/content")
-    fun getEmployeePage(pageable: Pageable): ResponseEntity<Any> {
+    fun getEmployeePage(@RequestHeader("Authorization") token: String,pageable: Pageable): ResponseEntity<Any> {
+
         return try {
+            val response = auth.validateToken(token)
+            if (!response) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido")
+            }
             // Chame a função findAll do serviço para obter a página de funcionários
             val employeesPage = employeeService.findAll(pageable)
 
@@ -131,6 +136,18 @@ class CurriculoFileController(private val curriculoFileService: CurriculoFileSer
             ResponseEntity.ok().body(employees)
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error getting all employees: ${e.message}")
+        }
+    }
+
+    @GetMapping("/verification")
+    fun verify(@RequestHeader("Authorization") token: String): ResponseEntity<Any> {
+        val response = auth.validateToken(token)
+
+
+        return if (!response) {
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido")
+        } else {
+            ResponseEntity.status(HttpStatus.OK).body("Token válido")
         }
     }
 }
