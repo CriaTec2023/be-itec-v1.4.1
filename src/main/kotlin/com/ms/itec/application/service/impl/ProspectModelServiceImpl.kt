@@ -11,12 +11,14 @@ import com.ms.itec.presentation.excepetion.OperationNotComplete
 import com.ms.itec.presentation.excepetion.RecordNotFound
 import com.ms.itec.presentation.mapper.FromDto
 import com.ms.itec.presentation.mapper.FromEntity
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.util.*
 
 @Service
 class ProspectModelServiceImpl(private var prospectPersistence: IProspectModelPersistence): IProspectModelService{
+    @Transactional
     override fun save(prospectModelDto: ProspectModelDto): ProspectModel {
 
         val prospectModel: ProspectModel = FromDto().toEntity(prospectModelDto)
@@ -39,7 +41,7 @@ class ProspectModelServiceImpl(private var prospectPersistence: IProspectModelPe
 
         return listResponse.sortedByDescending { it.createdAt }
     }
-
+    @Transactional
     override fun saveWithOwner(prospectModelDto: ProspectModelWithOwnerId): ProspectModel {
         val prospectModel: ProspectModel = FromDto().toEntity(prospectModelDto)
         return runCatching { prospectPersistence.save(prospectModel) }.getOrElse {
@@ -54,7 +56,7 @@ class ProspectModelServiceImpl(private var prospectPersistence: IProspectModelPe
 
         return listOfProspects.sortedByDescending { it.createdAt }
     }
-
+    @Transactional
     override fun update(prospectModelDto: ProspectModelWithIdDto): ProspectModel {
         val prospectModel = prospectPersistence.findById(prospectModelDto.id).orElseThrow {
             throw RecordNotFound("Record not found, id: ${prospectModelDto.id}")
@@ -76,7 +78,7 @@ class ProspectModelServiceImpl(private var prospectPersistence: IProspectModelPe
 
         return prospectModel
     }
-
+    @Transactional
     override fun delete(idProspect: String) {
         val prospectRecord = prospectPersistence.findById(idProspect).orElseThrow {
             throw RecordNotFound("Record not found, id: $idProspect")
@@ -86,7 +88,7 @@ class ProspectModelServiceImpl(private var prospectPersistence: IProspectModelPe
             throw OperationNotComplete("Error deleting prospect", it)
         }
     }
-
+    @Transactional
     override fun updateContacted(idProspect: String,idOwner:String): ProspectModel {
         val prospectRecord = prospectPersistence.findById(idProspect).orElseThrow {
             throw RecordNotFound("Record not found, id: $idProspect")

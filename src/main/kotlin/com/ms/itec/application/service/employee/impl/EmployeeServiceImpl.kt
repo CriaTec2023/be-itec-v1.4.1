@@ -9,12 +9,14 @@ import com.ms.itec.presentation.excepetion.OperationNotComplete
 import com.ms.itec.presentation.excepetion.RecordNotFound
 import com.ms.itec.presentation.mapper.FromDto
 import com.ms.itec.presentation.mapper.FromEntity
+import jakarta.transaction.Transactional
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
 data class EmployeeServiceImpl(private val curriculoFileServiceImpl: CurriculoFileServiceImpl, private val employeePersistence: IEmployeePersistence): IEmployeeModelService {
+    @Transactional
     override fun saveEmployeeModel(employeeDto: CurriculoDto): EmployeeModel {
         val identifier = curriculoFileServiceImpl.saveCurriculoFile(employeeDto.curriculoFile)
         val employeeModel = FromDto().toEntity(employeeDto, identifier)
@@ -22,7 +24,7 @@ data class EmployeeServiceImpl(private val curriculoFileServiceImpl: CurriculoFi
             throw OperationNotComplete("Error saving employee", it)
         }
     }
-
+    @Transactional
     override fun deleteEmployeeModelById(id: String) {
         runCatching { employeePersistence.deleteById(id) }.getOrElse {
             throw OperationNotComplete("Error deleting employee", it)
@@ -34,7 +36,7 @@ data class EmployeeServiceImpl(private val curriculoFileServiceImpl: CurriculoFi
             throw RecordNotFound("Record not found, id: $id")
         }
     }
-
+    @Transactional
     override fun updateEmployeeModel(employee: EmployeeModel): EmployeeModel {
         return runCatching { employeePersistence.save(employee) }.getOrElse {
             throw OperationNotComplete("Error updating employee", it)

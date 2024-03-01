@@ -9,6 +9,7 @@ import com.ms.itec.infrastructure.persistence.IContentPersistence
 import com.ms.itec.presentation.excepetion.OperationNotComplete
 import com.ms.itec.presentation.excepetion.RecordNotFound
 import com.ms.itec.presentation.mapper.FromDto
+import jakarta.transaction.Transactional
 import jakarta.validation.Valid
 import org.springframework.stereotype.Service
 import java.util.*
@@ -16,14 +17,14 @@ import java.util.*
 @Service
 class ContentServiceImpl(private val contentPersistence: IContentPersistence): IContentService {
 
-
+    @Transactional
     override fun save(contentDto: ContentDto): Content {
         val content: Content = FromDto().toEntity(contentDto)
         return runCatching { contentPersistence.save(content) }.getOrElse {
             throw OperationNotComplete("Error saving content", it)
         }
     }
-
+    @Transactional
     override fun update(@Valid contentDto: ContentDtoWithId): Content {
         val contentRecord = contentPersistence.findById(contentDto.id).orElseThrow {
             throw RecordNotFound("Record not found, id: ${contentDto.id}")
@@ -50,7 +51,7 @@ class ContentServiceImpl(private val contentPersistence: IContentPersistence): I
         val result = runCatching { contentPersistence.findAll() }
         return result.getOrElse { emptyList() }
     }
-
+    @Transactional
     override fun delete(id: String) {
         runCatching { contentPersistence.deleteById(id) }.getOrElse {
             throw RecordNotFound("Record not found, id: $id")

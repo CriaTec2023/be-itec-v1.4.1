@@ -5,12 +5,14 @@ import com.ms.itec.domain.entity.IdentifierProducer
 import com.ms.itec.domain.entity.employee.CurriculoFile
 import com.ms.itec.infrastructure.persistence.employee.ICurriculoFilePersistence
 import com.ms.itec.presentation.excepetion.OperationNotComplete
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 
 @Service
 class CurriculoFileServiceImpl(private val curriculoFilePersistence: ICurriculoFilePersistence) : ICurriculoFileService {
 
+    @Transactional
     override fun saveCurriculoFile(file: MultipartFile) : String {
         val curriculoFile = CurriculoFile(
             id = IdentifierProducer().creatIndentification(),

@@ -84,13 +84,10 @@ class CurriculoFileController(private val auth: AuthServiceImpl, private val cur
 
 
     @GetMapping("/content")
-    fun getEmployeePage(@RequestHeader("Authorization") token: String,pageable: Pageable): ResponseEntity<Any> {
+    fun getEmployeePage(pageable: Pageable): ResponseEntity<Any> {
 
         return try {
-            val response = auth.validateToken(token)
-            if (!response) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido")
-            }
+
             // Chame a função findAll do serviço para obter a página de funcionários
             val employeesPage = employeeService.findAll(pageable)
 
