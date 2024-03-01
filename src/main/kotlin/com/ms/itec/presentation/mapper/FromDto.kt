@@ -6,6 +6,7 @@ import com.ms.itec.application.enums.Tag
 import com.ms.itec.domain.entity.IdentifierProducer
 import com.ms.itec.domain.entity.content.Content
 import com.ms.itec.domain.entity.employee.EmployeeModel
+import com.ms.itec.domain.entity.opnions.OpinionsModel
 import com.ms.itec.domain.entity.prospectModel.ProspectModel
 import jakarta.validation.Valid
 import java.time.LocalDateTime
@@ -96,6 +97,19 @@ class FromDto {
             ownerId = dto.ownerId,
             createdAt = LocalDateTime.now().toString(),
             updatedAt = LocalDateTime.now()
+        )
+    }
+
+    fun toEntity(dto: OpinionDto): OpinionsModel {
+        return OpinionsModel(
+            name = dto.name.trim(),
+            email = dto.email.trim(),
+            polo = dto.polo.trim(),
+            phone = formatBrazilianPhoneNumber(dto.phone),
+            course = dto.course.trim(),
+            message = dto.message.trim(),
+            lgpd = dto.lgpd,
+            createdAt = creatDate()
         )
     }
 

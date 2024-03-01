@@ -4,7 +4,7 @@ import com.ms.itec.application.service.employee.ICurriculoFileService
 import com.ms.itec.domain.entity.IdentifierProducer
 import com.ms.itec.domain.entity.employee.CurriculoFile
 import com.ms.itec.infrastructure.persistence.employee.ICurriculoFilePersistence
-import com.ms.itec.presentation.excepetion.OperationNotComplete
+import com.ms.itec.presentation.excepetion.OperationNotCompletedException
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
@@ -22,7 +22,7 @@ class CurriculoFileServiceImpl(private val curriculoFilePersistence: ICurriculoF
             byte = file.bytes
         )
         return runCatching { curriculoFilePersistence.save(curriculoFile).id }.getOrElse {
-            OperationNotComplete("Error saving curriculo file", it).toString()
+            OperationNotCompletedException("Error saving curriculo file", it).toString()
         }
 
     }

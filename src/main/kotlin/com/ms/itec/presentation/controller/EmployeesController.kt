@@ -1,4 +1,4 @@
-package com.ms.itec.presentation.controller.employee
+package com.ms.itec.presentation.controller
 
 import com.ms.itec.application.dto.request.CurriculoDto
 import com.ms.itec.application.dto.response.DtoResponse
@@ -15,10 +15,9 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 
-const val MULTIPART_FORM_DATA = "multipart/form-data"
 @RestController
 @RequestMapping("v1/employees")
-class CurriculoFileController(private val auth: AuthServiceImpl, private val curriculoFileService: CurriculoFileServiceImpl, private val employeeService: EmployeeServiceImpl){
+class EmployeesController(private val auth: AuthServiceImpl, private val curriculoFileService: CurriculoFileServiceImpl, private val employeeService: EmployeeServiceImpl){
 
     @PostMapping("/upload")
     fun uploadCurriculo(
@@ -60,7 +59,7 @@ class CurriculoFileController(private val auth: AuthServiceImpl, private val cur
         }
     }
 
-    @PostMapping("/uploadFile", consumes = [MULTIPART_FORM_DATA])
+    @PostMapping("/uploadFile", consumes = ["multipart/form-data"])
     fun uploadFile(@RequestParam("file") file: MultipartFile): ResponseEntity<Any> {
         return try {
             val fileIdentification = curriculoFileService.saveCurriculoFile(file)
@@ -121,13 +120,13 @@ class CurriculoFileController(private val auth: AuthServiceImpl, private val cur
 
     @GetMapping("/search")
     fun getSearch(
-            @RequestParam(required = false) polo: String?,
-            @RequestParam(required = false) timeOfExperience: String?,
-            @RequestParam(required = false) setor: String?,
-                  ): ResponseEntity<Any> {
+        @RequestParam(required = false) polo: String?,
+        @RequestParam(required = false) timeOfExperience: String?,
+        @RequestParam(required = false) setor: String?,
+    ): ResponseEntity<Any> {
         return try {
             val employees =
-                    employeeService.search(polo, timeOfExperience, setor)
+                employeeService.search(polo, timeOfExperience, setor)
                     .sortedByDescending { it.createdAt }
 
             ResponseEntity.ok().body(employees)

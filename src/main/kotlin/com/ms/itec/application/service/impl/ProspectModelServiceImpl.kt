@@ -7,8 +7,8 @@ import com.ms.itec.application.enums.Polos
 import com.ms.itec.application.service.IProspectModelService
 import com.ms.itec.domain.entity.prospectModel.ProspectModel
 import com.ms.itec.infrastructure.persistence.IProspectModelPersistence
-import com.ms.itec.presentation.excepetion.OperationNotComplete
-import com.ms.itec.presentation.excepetion.RecordNotFound
+import com.ms.itec.presentation.excepetion.OperationNotCompletedException
+import com.ms.itec.presentation.excepetion.RecordNotFoundException
 import com.ms.itec.presentation.mapper.FromDto
 import com.ms.itec.presentation.mapper.FromEntity
 import jakarta.transaction.Transactional
@@ -24,14 +24,14 @@ class ProspectModelServiceImpl(private var prospectPersistence: IProspectModelPe
         val prospectModel: ProspectModel = FromDto().toEntity(prospectModelDto)
 
         return runCatching { prospectPersistence.save(prospectModel) }.getOrElse {
-            throw OperationNotComplete("ERROR SAVING: ", it)
+            throw OperationNotCompletedException("ERROR SAVING: ", it)
         }
     }
 
     override fun getWithOwner(idOwner: String): List<ProspectModel> {
 
         val listOfProspects = prospectPersistence.getWithIdOwner(idOwner).orElseThrow {
-                throw RecordNotFound("ERROR GETTING PROSPECTS WITH 'OWNER ID': $idOwner ")
+                throw RecordNotFoundException("ERROR GETTING PROSPECTS WITH 'OWNER ID': $idOwner ")
         }
         val listResponse = listOfProspects.sortedByDescending { it.createdAt }
 
@@ -45,13 +45,13 @@ class ProspectModelServiceImpl(private var prospectPersistence: IProspectModelPe
     override fun saveWithOwner(prospectModelDto: ProspectModelWithOwnerId): ProspectModel {
         val prospectModel: ProspectModel = FromDto().toEntity(prospectModelDto)
         return runCatching { prospectPersistence.save(prospectModel) }.getOrElse {
-            throw OperationNotComplete("ERROR SAVING: ", it)
+            throw OperationNotCompletedException("ERROR SAVING: ", it)
         }
     }
 
     override fun getWithoutOwner(): List<ProspectModel> {
         val listOfProspects = prospectPersistence.getWithoutOwner().orElseThrow {
-            throw RecordNotFound("ERROR GETTING PROSPECTS WITHOUT 'OWNER ID' ")
+            throw RecordNotFoundException("ERROR GETTING PROSPECTS WITHOUT 'OWNER ID' ")
         }
 
         return listOfProspects.sortedByDescending { it.createdAt }
@@ -59,7 +59,7 @@ class ProspectModelServiceImpl(private var prospectPersistence: IProspectModelPe
     @Transactional
     override fun update(prospectModelDto: ProspectModelWithIdDto): ProspectModel {
         val prospectModel = prospectPersistence.findById(prospectModelDto.id).orElseThrow {
-            throw RecordNotFound("Record not found, id: ${prospectModelDto.id}")
+            throw RecordNotFoundException("Record not found, id: ${prospectModelDto.id}")
         }
         println("Objeto antes do save: $prospectModelDto")
 
@@ -81,17 +81,17 @@ class ProspectModelServiceImpl(private var prospectPersistence: IProspectModelPe
     @Transactional
     override fun delete(idProspect: String) {
         val prospectRecord = prospectPersistence.findById(idProspect).orElseThrow {
-            throw RecordNotFound("Record not found, id: $idProspect")
+            throw RecordNotFoundException("Record not found, id: $idProspect")
         }
 
         runCatching { prospectPersistence.delete(prospectRecord) }.getOrElse {
-            throw OperationNotComplete("Error deleting prospect", it)
+            throw OperationNotCompletedException("Error deleting prospect", it)
         }
     }
     @Transactional
     override fun updateContacted(idProspect: String,idOwner:String): ProspectModel {
         val prospectRecord = prospectPersistence.findById(idProspect).orElseThrow {
-            throw RecordNotFound("Record not found, id: $idProspect")
+            throw RecordNotFoundException("Record not found, id: $idProspect")
         }
         prospectRecord.apply {
             ownerId = idOwner

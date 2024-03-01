@@ -5,8 +5,8 @@ import com.ms.itec.application.dto.request.ContentDtoWithId
 import com.ms.itec.application.enums.Tag
 import com.ms.itec.domain.entity.content.Content
 import com.ms.itec.infrastructure.persistence.IContentPersistence
-import com.ms.itec.presentation.excepetion.OperationNotComplete
-import com.ms.itec.presentation.excepetion.RecordNotFound
+import com.ms.itec.presentation.excepetion.OperationNotCompletedException
+import com.ms.itec.presentation.excepetion.RecordNotFoundException
 import com.ms.itec.presentation.mapper.FromDto
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -84,10 +84,10 @@ class ContentServiceImplTest {
 
 
         `when`(contentPersistence.save(any())).
-        thenThrow(OperationNotComplete("Error saving content"))
+        thenThrow(OperationNotCompletedException("Error saving content"))
 
 
-        assertThrows(OperationNotComplete::class.java) {
+        assertThrows(OperationNotCompletedException::class.java) {
             contentServiceImpl.save(contentDto)
         }
 
@@ -150,10 +150,10 @@ class ContentServiceImplTest {
         )
 
         `when`(contentPersistence.findById(any())).thenThrow(
-            RecordNotFound("Record not found, id: ${contentDto.id}")
+            RecordNotFoundException("Record not found, id: ${contentDto.id}")
         )
 
-        assertThrows(RecordNotFound::class.java) {
+        assertThrows(RecordNotFoundException::class.java) {
             contentServiceImpl.update(contentDto)
         }
 
@@ -264,10 +264,10 @@ class ContentServiceImplTest {
         val expectId = UUID.randomUUID().toString()
 
         `when`(contentPersistence.deleteById(any())).thenThrow(
-            RecordNotFound("Record not found, id: $expectId")
+            RecordNotFoundException("Record not found, id: $expectId")
         )
 
-        assertThrows(RecordNotFound::class.java) {
+        assertThrows(RecordNotFoundException::class.java) {
             contentServiceImpl.delete(expectId)
         }
     }

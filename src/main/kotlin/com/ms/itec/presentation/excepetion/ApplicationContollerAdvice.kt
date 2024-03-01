@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 @RestControllerAdvice
 class ApplicationContollerAdvice {
 
-    @ExceptionHandler(OperationNotComplete::class)
+    @ExceptionHandler(OperationNotCompletedException::class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
-    fun handleOperationNotComplete(ex: OperationNotComplete):Map<String, String> {
+    fun handleOperationNotComplete(ex: OperationNotCompletedException):Map<String, String> {
         val logger = org.slf4j.LoggerFactory.getLogger(this.javaClass)
         logger.error("Operation Not Completed: ${ex.message}")
         return mapOf("Operation Not Completed:" to ex.message!!)
@@ -27,10 +27,10 @@ class ApplicationContollerAdvice {
         return mapOf("Invalid Arguments passed in parameters:" to ex.message!!)
     }
 
-    @ExceptionHandler(RecordNotFound::class)
+    @ExceptionHandler(RecordNotFoundException::class)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
-    fun handleRecordNotfound(ex: OperationNotComplete): Map<String, String> {
+    fun handleRecordNotfound(ex: OperationNotCompletedException): Map<String, String> {
         val logger = org.slf4j.LoggerFactory.getLogger(this.javaClass)
         logger.error("Operation Not Completed: ${ex.message}")
         return mapOf("Record Not Found" to ex.message!!)

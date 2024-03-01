@@ -6,8 +6,8 @@ import com.ms.itec.application.enums.Tag
 import com.ms.itec.application.service.IContentService
 import com.ms.itec.domain.entity.content.Content
 import com.ms.itec.infrastructure.persistence.IContentPersistence
-import com.ms.itec.presentation.excepetion.OperationNotComplete
-import com.ms.itec.presentation.excepetion.RecordNotFound
+import com.ms.itec.presentation.excepetion.OperationNotCompletedException
+import com.ms.itec.presentation.excepetion.RecordNotFoundException
 import com.ms.itec.presentation.mapper.FromDto
 import jakarta.transaction.Transactional
 import jakarta.validation.Valid
@@ -21,13 +21,13 @@ class ContentServiceImpl(private val contentPersistence: IContentPersistence): I
     override fun save(contentDto: ContentDto): Content {
         val content: Content = FromDto().toEntity(contentDto)
         return runCatching { contentPersistence.save(content) }.getOrElse {
-            throw OperationNotComplete("Error saving content", it)
+            throw OperationNotCompletedException("Error saving content", it)
         }
     }
     @Transactional
     override fun update(@Valid contentDto: ContentDtoWithId): Content {
         val contentRecord = contentPersistence.findById(contentDto.id).orElseThrow {
-            throw RecordNotFound("Record not found, id: ${contentDto.id}")
+            throw RecordNotFoundException("Record not found, id: ${contentDto.id}")
         }
 
         return if (!areContentsEqual(contentRecord, contentDto)) {
@@ -54,7 +54,7 @@ class ContentServiceImpl(private val contentPersistence: IContentPersistence): I
     @Transactional
     override fun delete(id: String) {
         runCatching { contentPersistence.deleteById(id) }.getOrElse {
-            throw RecordNotFound("Record not found, id: $id")
+            throw RecordNotFoundException("Record not found, id: $id")
         }
     }
 

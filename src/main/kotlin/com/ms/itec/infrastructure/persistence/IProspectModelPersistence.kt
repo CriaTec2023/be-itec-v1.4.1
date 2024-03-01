@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository
 import java.util.*
 
 @Repository
-@Transactional
 interface IProspectModelPersistence: JpaRepository<ProspectModel, String>, ProspectModelRepository{
 
         @Query("SELECT p FROM ProspectModel p WHERE p.ownerId = ''")

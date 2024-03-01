@@ -1,8 +1,10 @@
 package com.ms.itec.presentation.mapper
 
 import com.ms.itec.application.dto.response.EmployeeModelDto
+import com.ms.itec.application.dto.response.OpinionResponseDto
 import com.ms.itec.application.dto.response.ProspectResponseDto
 import com.ms.itec.domain.entity.employee.EmployeeModel
+import com.ms.itec.domain.entity.opnions.OpinionsModel
 import com.ms.itec.domain.entity.prospectModel.ProspectModel
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -43,6 +45,18 @@ class FromEntity {
             timeOfExperience = employee.timeOfExperience,
             createdAt = convertDate(employee.createdAt).toString()
 
+        )
+    }
+
+    fun toDto(entity :OpinionsModel): OpinionResponseDto {
+        return OpinionResponseDto(
+            name = entity.name,
+            email = entity.email,
+            polo = entity.polo,
+            phone = entity.phone,
+            course = entity.course,
+            message = entity.message,
+            createdAt = convertDate(entity.createdAt).toString()
         )
     }
 
