@@ -25,6 +25,7 @@ class FromDto {
             phone = formatBrazilianPhoneNumber(dto.phone),
             setor = dto.setor.trim(),
             polo  = dto.polo.trim(),
+            education = dto.education.trim(),
             curriculoFileLink = uriCurriculo,
             lgpd = dto.lgpd,
             timeOfExperience = dto.timeOfExperience,

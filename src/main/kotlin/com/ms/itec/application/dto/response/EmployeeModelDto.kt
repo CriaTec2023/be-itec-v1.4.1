@@ -10,5 +10,6 @@ data class EmployeeModelDto(
     var curriculoFileLink: String = "",
     var lgpd:Boolean = false,
     var timeOfExperience : String,
-    var createdAt : String = ""
+    var createdAt : String = "",
+    var education:String = ""
 )

@@ -16,6 +16,7 @@ data class EmployeeModel(
     var polo:String = "",
     var phone:String = "",
     var setor:String = "",
+    var education:String = "",
     var curriculoFileLink: String = "",
     var lgpd:Boolean = false,
     var timeOfExperience : String,

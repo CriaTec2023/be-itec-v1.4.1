@@ -40,6 +40,7 @@ class FromEntity {
             polo = employee.polo,
             phone = employee.phone,
             setor = employee.setor,
+            education = employee.education,
             curriculoFileLink = employee.curriculoFileLink,
             lgpd = employee.lgpd,
             timeOfExperience = employee.timeOfExperience,

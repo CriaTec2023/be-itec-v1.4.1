@@ -11,5 +11,6 @@ data class CurriculoDto(
     var setor:String = "",
     var curriculoFile:MultipartFile,
     var lgpd:Boolean = false,
-    var timeOfExperience : String
+    var timeOfExperience : String,
+    var education:String = ""
 )
