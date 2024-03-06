@@ -28,7 +28,8 @@ class EmployeesController(private val auth: AuthServiceImpl, private val curricu
         @RequestParam("phone") phone: String,
         @RequestParam("setor") setor: String,
         @RequestParam("lgpd") lgpd: Boolean,
-        @RequestParam("timeOfExperience") timeOfExperience: String
+        @RequestParam("timeOfExperience") timeOfExperience: String,
+        @RequestParam("education") education:String
     ): ResponseEntity<Any> {
         return try {
             val curriculoDto = CurriculoDto(
@@ -37,6 +38,7 @@ class EmployeesController(private val auth: AuthServiceImpl, private val curricu
                 polo = polo,
                 phone = phone,
                 setor = setor,
+                education = education,
                 curriculoFile = file,
                 lgpd = lgpd,
                 timeOfExperience = timeOfExperience
@@ -123,10 +125,11 @@ class EmployeesController(private val auth: AuthServiceImpl, private val curricu
         @RequestParam(required = false) polo: String?,
         @RequestParam(required = false) timeOfExperience: String?,
         @RequestParam(required = false) setor: String?,
+        @RequestParam(required = false) education: String?
     ): ResponseEntity<Any> {
         return try {
             val employees =
-                employeeService.search(polo, timeOfExperience, setor)
+                employeeService.search(polo, timeOfExperience, setor, education)
                     .sortedByDescending { it.createdAt }
 
             ResponseEntity.ok().body(employees)
