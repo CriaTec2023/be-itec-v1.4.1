@@ -3,13 +3,14 @@ version: "3"
 services:
   db:
     image: postgres
-    container_name: api-itec-db
+    container_name: api-itec-content-db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: "090821"
-      POSTGRES_DB: "itecdb"
+      POSTGRES_DB: "api-itec-content-db"
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d/init.sql
 
