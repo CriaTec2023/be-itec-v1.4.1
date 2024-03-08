@@ -4,7 +4,7 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 COPY . .
-RUN gradle clean build -x test
+RUN ./gradlew clean build -x test
 
 FROM amazoncorretto:17
 EXPOSE 8080
