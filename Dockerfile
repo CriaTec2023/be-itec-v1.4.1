@@ -1,13 +1,15 @@
-FROM amazoncorretto:17-alpine-jdk AS builder
-
-WORKDIR /app
-COPY . .
-RUN ./gradlew clean build -x test
-
-
 FROM amazoncorretto:17
 EXPOSE 8080
 
-COPY --from=builder /app/build/libs/itec-0.0.1-SNAPSHOT.jar .
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
 
-CMD ["java", "-jar", "itec-0.0.1-SNAPSHOT.jar"]
+RUN gradle --version
+
+COPY --from=build ~/.gradle /root/.gradle
+
+COPY . .
+RUN gradle clean build -x test
+
+COPY --from=build /usr/src/app/build/libs/*.jar app.jar
+CMD ["java", "-jar", "app.jar"]
