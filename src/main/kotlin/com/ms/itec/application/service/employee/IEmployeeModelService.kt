@@ -20,7 +20,7 @@ interface IEmployeeModelService {
 
     fun findAll(pageable: Pageable): Page<EmployeeModel>
 
-    fun search(polo: String?, timeOfExperience: String?, setor: String?): List<EmployeeModelDto>
+    fun search(polo: String?, timeOfExperience: String?, setor: String?, education: String?): List<EmployeeModelDto>
 
 
 }

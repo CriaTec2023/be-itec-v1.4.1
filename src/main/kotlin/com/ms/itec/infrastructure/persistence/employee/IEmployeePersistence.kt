@@ -11,10 +11,11 @@ import org.springframework.stereotype.Repository
 interface IEmployeePersistence: JpaRepository<EmployeeModel, String>, IEmployeeModelRepository {
 
     override fun getEmployeeBySetor(setor: String): List<EmployeeModel>
-    @Query("SELECT e FROM EmployeeModel e WHERE (:polo IS NULL OR e.polo = :polo) AND (:timeOfExperience IS NULL OR e.timeOfExperience = :timeOfExperience) AND (:setor IS NULL OR e.setor = :setor)")
+    @Query("SELECT e FROM EmployeeModel e WHERE (:polo IS NULL OR e.polo = :polo) AND (:timeOfExperience IS NULL OR e.timeOfExperience = :timeOfExperience) AND (:setor IS NULL OR e.setor = :setor) AND (:education IS NULL OR e.education = :education)")
     override fun search(
             @Param("polo") polo: String?,
             @Param("timeOfExperience") timeOfExperience: String?,
-            @Param("setor") setor: String?
+            @Param("setor") setor: String?,
+            @Param("education") education: String?
     ): List<EmployeeModel>
 }

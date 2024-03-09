@@ -8,7 +8,7 @@ interface IEmployeeModelRepository {
     fun getEmployeeBySetor(setor: String): List<EmployeeModel>
 
 
-    fun search(polo: String?, timeOfExperience: String?, setor: String?): List<EmployeeModel>
+    fun search(polo: String?, timeOfExperience: String?, setor: String?, education: String?): List<EmployeeModel>
 
 
 }

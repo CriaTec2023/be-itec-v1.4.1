@@ -55,9 +55,9 @@ data class EmployeeServiceImpl(private val curriculoFileServiceImpl: CurriculoFi
 
     }
 
-    override fun search(polo: String?, timeOfExperience: String?, setor: String?): List<EmployeeModelDto> {
+    override fun search(polo: String?, timeOfExperience: String?, setor: String?, education: String?): List<EmployeeModelDto> {
 
-        val employees = employeePersistence.search(polo, timeOfExperience, setor).map { FromEntity().toDto(it) }
+        val employees = employeePersistence.search(polo, timeOfExperience, setor,education).map { FromEntity().toDto(it) }
 
         return employees
 
