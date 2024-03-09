@@ -4,7 +4,7 @@ WORKDIR /home/gradle/src
 RUN gradle build
 
 FROM amazoncorretto:17
-EXPOSE 8080
+EXPOSE 8081
 COPY --from=build /home/gradle/src/build/libs/itec-0.0.3-SNAPSHOT.jar /app/
 RUN bash -c 'touch /app/itec-0.0.3-SNAPSHOT.jar'
 ENTRYPOINT ["java", "-XX:+UnlockExperimentalVMOptions", "-Djava.security.egd=file:/dev/./urandom","-jar","/app/itec-0.0.3-SNAPSHOT.jar"]
