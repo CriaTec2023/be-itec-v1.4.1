@@ -1,6 +1,7 @@
 package com.ms.itec.presentation.controller
 
 import com.ms.itec.application.dto.request.OpinionDto
+import com.ms.itec.application.dto.response.DtoResponse
 import com.ms.itec.application.service.impl.OpinionServiceImpl
 import com.ms.itec.presentation.mapper.FromEntity
 import org.springframework.data.domain.PageImpl
@@ -21,11 +22,21 @@ class OpinionController(val opinionService: OpinionServiceImpl) {
     @PostMapping("/creatOpinion")
     fun createOpinion(@RequestBody opinion: OpinionDto): ResponseEntity<Any> {
         return try {
-            val response = opinionService.saveOpinion(opinion)
+            opinionService.saveOpinion(opinion)
+            val response = DtoResponse(
+                status = 201,
+                sucess = true,
+                error = "",
+            )
             ResponseEntity.status(HttpStatus.CREATED).body(response)
 
         }catch (e: Exception){
-            ResponseEntity.badRequest().body(e.message)
+            val response = DtoResponse(
+                status = 400,
+                sucess = false,
+                error = e.message!!.toString(),
+            )
+            ResponseEntity.badRequest().body(response)
         }
     }
 

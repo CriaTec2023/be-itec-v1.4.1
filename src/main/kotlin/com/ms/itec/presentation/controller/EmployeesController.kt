@@ -60,7 +60,6 @@ class EmployeesController(private val auth: AuthServiceImpl, private val curricu
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response)
         }
     }
-
     @PostMapping("/uploadFile", consumes = ["multipart/form-data"])
     fun uploadFile(@RequestParam("file") file: MultipartFile): ResponseEntity<Any> {
         return try {
