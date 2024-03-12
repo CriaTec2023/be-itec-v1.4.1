@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  api-itec-content:
+  api_itec_content:
     image: api-itec-content
     container_name: api-itec-content
     build:
@@ -30,4 +30,3 @@ services:
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
       - ./init-scripts:/docker-entrypoint-initdb.d/init.sql
-
