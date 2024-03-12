@@ -2,8 +2,8 @@ version: "3"
 
 services:
   api_itec_content:
-    image: api-itec-content
-    container_name: api-itec-content
+    image: api_itec_content
+    container_name: api_itec_content
     build:
       context: .
       dockerfile: Dockerfile
