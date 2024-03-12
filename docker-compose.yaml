@@ -2,25 +2,22 @@ version: "3"
 
 services:
   api-itec-content:
+    image: api-itec-content
+    container_name: api-itec-content
     build:
-      context: ./
+      context: .
       dockerfile: Dockerfile
     ports:
-        - "8080:8080"
-    restart: always
-    environment:
-        - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/api-itec-content-db
-        - SPRING_DATASOURCE_USERNAME=postgres
-        - SPRING_DATASOURCE_PASSWORD=090821
-        - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-        - SPRING_JPA_SHOW_SQL=true
-        - SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL=true
-        - SPRING_JPA_PROPERTIES_HIBERNATE_USE_SQL_COMMENTS=true
-        - SERVER_PORT=8080
-    networks:
-        - spring-boot-postgres-network
+      - "8080:8080"
     depends_on:
-        - postgres-service
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/api-itec-content-db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: "090821"
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: true
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
   db:
     image: postgres
     container_name: api-itec-content-db
@@ -29,12 +26,8 @@ services:
       POSTGRES_PASSWORD: "090821"
       POSTGRES_DB: "api-itec-content-db"
     ports:
-      - "5432:5432"
-    networks:
-      - spring-boot-postgres-network
+      - "5433:5432"
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
       - ./init-scripts:/docker-entrypoint-initdb.d/init.sql
-networks:
-  spring-boot-postgres-network:
-    driver: bridge
+
