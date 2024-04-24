@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service
 @Service
 class AdvancedServiceMessageImpl(private val advancedServiceMessage: AdvancedServiceMessage){
     fun sendMessage(prospectModelDto: ProspectModelDto){
-        print("Message process: $prospectModelDto")
         val messageAdvancedDto = FromDto().toMessageAdvancedDto(prospectModelDto)
         print(advancedServiceMessage.sendMessage(messageAdvancedDto))
     }

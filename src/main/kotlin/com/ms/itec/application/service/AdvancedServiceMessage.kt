@@ -11,7 +11,6 @@ interface AdvancedServiceMessage {
 
     @PostMapping
     fun sendMessage(@RequestBody data: MessageAdvancedDto){
-        print("Message sent: $data")
     }
 
 }
