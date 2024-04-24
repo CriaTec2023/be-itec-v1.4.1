@@ -27,9 +27,11 @@ class ProspectModelServiceImpl(private var prospectPersistence: IProspectModelPe
 
         val prospectModel: ProspectModel = FromDto().toEntity(prospectModelDto)
 
-        return runCatching { prospectPersistence.save(prospectModel) }.getOrElse {
-            throw OperationNotCompletedException("ERROR SAVING: ", it)
-        }
+//        return runCatching { prospectPersistence.save(prospectModel) }.getOrElse {
+//            throw OperationNotCompletedException("ERROR SAVING: ", it)
+//        }
+
+        return prospectModel
     }
 
     override fun getWithOwner(idOwner: String): List<ProspectModel> {
