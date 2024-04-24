@@ -98,13 +98,13 @@ class FromDto {
     }
 
     fun toMessageAdvancedDto( prospectDto: ProspectModelDto): MessageAdvancedDto {
-        val message =  MessageAdvancedDto(
+        return MessageAdvancedDto(
             body = "Olá! Bacana saber que você está interessado no curso ${prospectDto.course}, vimos pelo nosso site! Vamos seguir com o seu atendimento, responde essa mensagem para começarmos!",
             number = formatForWhatsapp(prospectDto.phone),
             queueId = getQueueId(prospectDto.polo!!),
             openTicket = "1"
         )
-        return message
+
     }
 
 
