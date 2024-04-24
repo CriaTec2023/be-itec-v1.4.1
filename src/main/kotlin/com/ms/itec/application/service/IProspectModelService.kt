@@ -21,5 +21,7 @@ interface IProspectModelService {
 
     fun updateContacted(idProspect: String, idOwner:String): ProspectModel
 
+    fun getAllProspects(): List<ProspectModel>
+
 
 }

@@ -44,6 +44,21 @@ class ProspectModelController(private val prospectService: ProspectModelServiceI
 
         return ResponseEntity.status(HttpStatus.OK).body(responseData)
     }
+
+    @GetMapping("/records/all")
+    fun getAllData(): ResponseEntity<Any> {
+        val data =  prospectService.getAllProspects()
+        if (data.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("NO CONTENT")
+        }
+
+        val responseData = data.asSequence()
+            .map { FromEntity().toDto(it) }
+            .sortedByDescending { it.createdAt }
+            .toList()
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseData)
+    }
     @GetMapping("/records/{key}")
     fun getRecordsWithOwner(@PathVariable key:String): ResponseEntity<Any> {
         val response =  prospectService.getWithOwner(key)

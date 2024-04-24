@@ -101,6 +101,10 @@ class ProspectModelServiceImpl(private var prospectPersistence: IProspectModelPe
         return prospectPersistence.save(prospectRecord)
     }
 
+    override fun getAllProspects(): List<ProspectModel> {
+        return prospectPersistence.findAll()
+    }
+
 
 
 //    override fun updateDate(): List<ProspectModel> {
