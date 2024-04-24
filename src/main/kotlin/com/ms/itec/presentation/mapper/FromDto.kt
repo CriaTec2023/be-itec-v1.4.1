@@ -65,23 +65,6 @@ class FromDto {
 
     }
 
-    fun toEntity(@Valid dto: ProspectModelWithIdDto): ProspectModel {
-
-        return ProspectModel(
-            id = dto.id,
-            name = dto.name.trim(),
-            email = dto.email.trim(),
-            phone = formatBrazilianPhoneNumber(dto.phone),
-            polo = if (dto.polo != null ) Polos.valueOf(dto.polo!!.trim()) else Polos.UNDECIDED,
-            course = dto.course.trim(),
-            cupom = dto.cupom,
-            emailMarketing = dto.emailMarketing,
-            contacted = false,
-            ownerId = "",
-            createdAt = LocalDateTime.now().toString(),
-            updatedAt = LocalDateTime.now()
-        )
-        }
 
     fun toEntity(@Valid dto: ProspectModelWithOwnerId): ProspectModel {
 
@@ -114,6 +97,16 @@ class FromDto {
         )
     }
 
+    fun toMessageAdvancedDto( prospectDto: ProspectModelDto): MessageAdvancedDto {
+        val message =  MessageAdvancedDto(
+            body = "Olá! Bacana saber que você está interessado no curso ${prospectDto.course}, vimos pelo nosso site! Vamos seguir com o seu atendimento, responde essa mensagem para começarmos!",
+            number = formatForWhatsapp(prospectDto.phone),
+            queueId = getQueueId(prospectDto.polo!!),
+            openTicket = "1"
+        )
+        return message
+    }
+
 
     fun formatBrazilianPhoneNumber(input: String): String {
         // Remove todos os caracteres não numéricos
@@ -132,6 +125,27 @@ class FromDto {
             }
         } else {
             input
+        }
+    }
+
+    private fun formatForWhatsapp(input: String): String {
+        return buildString {
+        append("55")
+        append(input) }
+    }
+
+
+
+    private fun getQueueId(polo: String): String {
+        return when (polo) {
+            "VR-VILA" -> "12"
+            "VR-RETIRO" -> "12"
+            "RESENDE" -> "6"
+            "ANGRA DOS REIS" -> "1"
+            "PORTO REAL" -> "5"
+            "ITATIAIA" -> "4"
+            "BARRA MANSA" -> "3"
+            else -> "1"
         }
     }
 
