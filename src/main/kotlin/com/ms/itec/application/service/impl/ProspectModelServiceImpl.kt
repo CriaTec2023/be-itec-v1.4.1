@@ -17,9 +17,13 @@ import java.time.LocalDateTime
 import java.util.*
 
 @Service
-class ProspectModelServiceImpl(private var prospectPersistence: IProspectModelPersistence): IProspectModelService{
+class ProspectModelServiceImpl(private var prospectPersistence: IProspectModelPersistence, private var advancedServiceMessageImpl: AdvancedServiceMessageImpl): IProspectModelService{
     @Transactional
     override fun save(prospectModelDto: ProspectModelDto): ProspectModel {
+
+        runCatching { advancedServiceMessageImpl.sendMessage(prospectModelDto) }.getOrElse {
+            throw OperationNotCompletedException("ERROR SENDING MESSAGE: ", it)
+        }
 
         val prospectModel: ProspectModel = FromDto().toEntity(prospectModelDto)
 
