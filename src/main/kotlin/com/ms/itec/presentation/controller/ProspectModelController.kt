@@ -17,6 +17,7 @@ class ProspectModelController(private val prospectService: ProspectModelServiceI
     @PostMapping("/recordProspect")
     fun save(@RequestBody prospectDto: ProspectModelDto): ResponseEntity<ResponseUpdateAndSaveDto> {
        val response =  prospectService.save(prospectDto)
+        println(response)
         return ResponseEntity.status(HttpStatus.CREATED).body(
             ResponseUpdateAndSaveDto( "'SUCCESSFULLY SAVED':", "Prospect: ${response.name} created with id: ${response.id}")
         )

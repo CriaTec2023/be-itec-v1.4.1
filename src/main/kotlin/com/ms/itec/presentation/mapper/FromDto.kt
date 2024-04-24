@@ -99,7 +99,7 @@ class FromDto {
 
     fun toMessageAdvancedDto( prospectDto: ProspectModelDto): MessageAdvancedDto {
         return MessageAdvancedDto(
-            body = "Olá! Bacana saber que você está interessado no curso ${prospectDto.course}, vimos pelo nosso site! Vamos seguir com o seu atendimento, responde essa mensagem para começarmos!",
+            body = "Olá ${prospectDto.name}! Vimos pelo nosso site que quer saber mais sobre o curso ${prospectDto.course}! Responde essa mensagem para seguirmos com o seu atendimento!",
             number = formatForWhatsapp(prospectDto.phone),
             queueId = getQueueId(prospectDto.polo!!),
             openTicket = "1"
