@@ -1,1 +1,0 @@
-CREATE DATABSE api-itec-content-db;
