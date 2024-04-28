@@ -138,13 +138,13 @@ class FromDto {
 
     private fun getQueueId(polo: String): String {
         return when (polo) {
-            "VR-VILA" -> "12"
-            "VR-RETIRO" -> "12"
-            "RESENDE" -> "6"
-            "ANGRA DOS REIS" -> "1"
-            "PORTO REAL" -> "5"
-            "ITATIAIA" -> "4"
-            "BARRA MANSA" -> "3"
+            "VR_VILA" -> "42"
+            "VR_RETIRO" -> "42"
+            "RESENDE" -> "32"
+            "ANGRA_DOS_REIS" -> "27"
+            "PORTO_REAL" -> "31"
+            "ITATIAIA" -> "43"
+            "BARRA_MANSA" -> "29"
             else -> "1"
         }
     }
