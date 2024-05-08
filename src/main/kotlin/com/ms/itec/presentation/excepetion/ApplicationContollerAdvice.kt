@@ -35,4 +35,13 @@ class ApplicationContollerAdvice {
         logger.error("Operation Not Completed: ${ex.message}")
         return mapOf("Record Not Found" to ex.message!!)
     }
+
+    @ExceptionHandler(NotPossibleSendTheMessageForNumbers::class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseBody
+    fun notPossibleSendTheMessageForNumbers(ex: OperationNotCompletedException): Map<String, String> {
+        val logger = org.slf4j.LoggerFactory.getLogger(this.javaClass)
+        logger.error("Operation Not Completed: ${ex.message}")
+        return mapOf("Is not possible send the messages" to ex.message!!)
+    }
 }

@@ -9,6 +9,7 @@ import com.ms.itec.domain.entity.employee.EmployeeModel
 import com.ms.itec.domain.entity.opnions.OpinionsModel
 import com.ms.itec.domain.entity.prospectModel.ProspectModel
 import jakarta.validation.Valid
+import org.springframework.web.multipart.MultipartFile
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -94,6 +95,18 @@ class FromDto {
             message = dto.message.trim(),
             lgpd = dto.lgpd,
             createdAt = creatDate()
+        )
+    }
+
+    fun toMessageWithImageAdvancedDto(image: MultipartFile, text: String, phone: String):MessageWithImageAdvancedDto {
+        var imgInBytes = image.bytes
+        val numberForWhats = formatForWhatsapp(phone)
+        return MessageWithImageAdvancedDto(
+            body = text,
+            number = numberForWhats,
+            queueId = "47",
+            openTicket = "1",
+            image = imgInBytes
         )
     }
 
