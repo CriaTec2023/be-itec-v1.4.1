@@ -25,7 +25,7 @@ class OpinionController(val opinionService: OpinionServiceImpl) {
             opinionService.saveOpinion(opinion)
             val response = DtoResponse(
                 status = 201,
-                sucess = true,
+                success = true,
                 error = "",
             )
             ResponseEntity.status(HttpStatus.CREATED).body(response)
@@ -33,7 +33,7 @@ class OpinionController(val opinionService: OpinionServiceImpl) {
         }catch (e: Exception){
             val response = DtoResponse(
                 status = 400,
-                sucess = false,
+                success = false,
                 error = e.message!!.toString(),
             )
             ResponseEntity.badRequest().body(response)

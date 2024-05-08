@@ -1,0 +1,279 @@
+openapi: 3.0.3
+info:
+  title: Swagger Users - OpenAPI 3.0
+  description: |-
+    This is a sample Pet Store Server based on the OpenAPI 3.0 specification.  You can find out more about
+    Swagger at [https://swagger.io](https://swagger.io). In the third iteration of the pet store, we've switched to the design first approach!
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: http://localhost:8080
+tags:
+  - name: users
+    description: Operations about user
+paths:
+  /v1/employees/upload:
+    post:
+      tags:
+        - users
+      summary: Upload a curriculum
+      description: Upload a curriculum file along with other details.
+      operationId: uploadCurriculum
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CurriculoDto'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DtoResponse'
+        '400':
+          description: Error on upload a curriculum
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DtoResponse'
+  /v1/employees/uploadFile:
+    post:
+      tags:
+        - users
+      summary: Upload a curriculum file
+      description: Upload a curriculum file only.
+      operationId: uploadFile
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+        '500':
+          description: Error on upload the file
+          content:
+            application/json:
+              schema:
+                type: string
+  /v1/employees/content:
+    get:
+      tags:
+        - users
+      summary: Get all employees
+      description: Get a paginated list of all employees.
+      operationId: getEmployeePage
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            format: int32
+          required: false
+        - in: query
+          name: size
+          schema:
+            type: integer
+            format: int32
+          required: false
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EmployeeModelDto'
+        '500':
+          description: Error getting all employees
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DtoResponse'
+  /v1/employees/download/{fileId}:
+    get:
+      tags:
+        - users
+      summary: Download curriculum file
+      description: Download a curriculum file by fileId.
+      operationId: downloadFile
+      parameters:
+        - in: path
+          name: fileId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+        '500':
+          description: Curriculum not found
+          content:
+            application/json:
+              schema:
+                type: string
+  /v1/employees/search:
+    get:
+      tags:
+        - users
+      summary: Search employees
+      description: Search employees by various parameters.
+      operationId: getSearch
+      parameters:
+        - in: query
+          name: polo
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: timeOfExperience
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: setor
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: education
+          schema:
+            type: string
+          required: false
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EmployeeModelDto'
+        '500':
+          description: Error getting all employees
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DtoResponse'
+  /v1/employees/verification:
+    get:
+      tags:
+        - users
+      summary: Verify token
+      description: Verify the validity of a token.
+      operationId: verify
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: string
+          required: true
+      responses:
+        '200':
+          description: Token válido
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          description: Token inválido
+          content:
+            application/json:
+              schema:
+                type: string
+components:
+  schemas:
+    CurriculoDto:
+      type: object
+      properties:
+        name:
+          type: string
+          example: John
+        email:
+          type: string
+          example: john@example.com
+        polo:
+          type: string
+          example: Example Polo
+        phone:
+          type: string
+          example: "+1234567890"
+        setor:
+          type: string
+          example: Example Setor
+        lgpd:
+          type: boolean
+          example: true
+        timeOfExperience:
+          type: string
+          example: 5 years
+        education:
+          type: string
+          example: Example Education
+        file:
+          type: string
+          format: binary
+    DtoResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 200
+        success:
+          type: boolean
+          example: true
+        error:
+          type: string
+          example: ''
+    EmployeeModelDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: f0822b54-0720-11ee-be56-0242ac120002
+        username:
+          type: string
+          example: theUser
+        name:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: James
+        email:
+          type: string
+          example: john@example.com
+        password:
+          type: string
+          example: '12345'
+        status:
+          $ref: '#/components/schemas/UserStatus'
+        createdAt:
+          type: string
+          format: date-time
+    UserStatus:
+      type: string
+      enum:
+        - ACTIVE
+        - INACTIVE
+      example: ACTIVE

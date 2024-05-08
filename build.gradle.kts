@@ -28,6 +28,8 @@ repositories {
 extra["springCloudVersion"] = "2023.0.0"
 
 dependencies {
+    implementation ("org.springdoc:springdoc-openapi-ui:1.5.12")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
     implementation ("io.github.openfeign.form:feign-form:3.8.0")
     implementation ("org.springframework.boot:spring-boot-starter-validation:3.2.1")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")

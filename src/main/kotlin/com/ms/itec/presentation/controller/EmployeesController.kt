@@ -2,11 +2,18 @@ package com.ms.itec.presentation.controller
 
 import com.ms.itec.application.dto.request.CurriculoDto
 import com.ms.itec.application.dto.response.DtoResponse
+import com.ms.itec.application.dto.response.EmployeeModelDto
 import com.ms.itec.application.service.employee.impl.CurriculoFileServiceImpl
 import com.ms.itec.application.service.employee.impl.EmployeeServiceImpl
 import com.ms.itec.application.service.impl.AuthServiceImpl
 import com.ms.itec.presentation.mapper.FromEntity
+import io.swagger.v3.oas.annotations.media.ArraySchema
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
 import org.springframework.core.io.ByteArrayResource
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -19,8 +26,27 @@ import org.springframework.web.multipart.MultipartFile
 @RequestMapping("v1/employees")
 class EmployeesController(private val auth: AuthServiceImpl, private val curriculoFileService: CurriculoFileServiceImpl, private val employeeService: EmployeeServiceImpl){
 
+
+
+    @ApiResponses(
+        ApiResponse(
+            responseCode = "200",
+            description = "upload a curriculum successfully",
+            content = [Content(mediaType = "application/json",
+                schema = Schema(implementation = DtoResponse::class))
+            ]),
+        ApiResponse(
+            responseCode = "400",
+            description = "Error on upload a curriculum",
+            content = [
+                Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = DtoResponse::class))
+            ]
+        )
+    )
     @PostMapping("/upload")
-    fun uploadCurriculo(
+    fun uploadCurriculum(
         @RequestParam("file") file: MultipartFile,
         @RequestParam("name") name: String,
         @RequestParam("email") email: String,
@@ -46,7 +72,7 @@ class EmployeesController(private val auth: AuthServiceImpl, private val curricu
             employeeService.saveEmployeeModel(curriculoDto)
             val response = DtoResponse(
                 status = 200,
-                sucess = true,
+                success = true,
                 error = "",
             )
 
@@ -54,12 +80,30 @@ class EmployeesController(private val auth: AuthServiceImpl, private val curricu
         } catch (e: Exception) {
             val response = DtoResponse(
                 status = 400,
-                sucess = false,
+                success = false,
                 error = e.message!!.toString(),
             )
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response)
         }
     }
+
+    @ApiResponses(
+        ApiResponse(
+            responseCode = "200",
+            description = "upload a curriculum file only",
+            content = [Content(mediaType = "application/json",
+                schema = Schema(implementation = String::class))
+            ]),
+        ApiResponse(
+            responseCode = "500",
+            description = "Error on upload the file",
+            content = [
+                Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = String::class))
+            ]
+        )
+    )
     @PostMapping("/uploadFile", consumes = ["multipart/form-data"])
     fun uploadFile(@RequestParam("file") file: MultipartFile): ResponseEntity<Any> {
         return try {
@@ -82,35 +126,64 @@ class EmployeesController(private val auth: AuthServiceImpl, private val curricu
 //        }
 //    }
 
-
+    @ApiResponses(
+        ApiResponse(
+            responseCode = "200",
+            description = "Get all employees successfully ",
+            content = [Content(mediaType = "application/json",
+                schema = Schema(implementation = Page::class))
+            ]),
+        ApiResponse(
+            responseCode = "500",
+            description = "Error getting all employees",
+            content = [
+                Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = String::class))
+            ]
+        )
+    )
     @GetMapping("/content")
     fun getEmployeePage(pageable: Pageable): ResponseEntity<Any> {
 
         return try {
 
-            // Chame a função findAll do serviço para obter a página de funcionários
             val employeesPage = employeeService.findAll(pageable)
 
-            // Mapeie os funcionários para DTOs, se necessário
             val employeesDtoPage = employeesPage.map { FromEntity().toDto(it) }
 
-            // Retorne a página de funcionários DTO na resposta
             ResponseEntity.ok().body(employeesDtoPage)
         } catch (e: Exception) {
-            // Em caso de erro, retorne uma resposta de erro com o status 500
+            // Em caso de erro,  uma resposta de erro com o status 500
             ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error getting all employees: ${e.message}")
         }
     }
+
+
+    @ApiResponses(
+        ApiResponse(
+            responseCode = "200",
+            description = "Get the curriculum to download ",
+            content = [Content(mediaType = "application/json",
+                schema = Schema(implementation = ByteArrayResource::class))
+            ]),
+        ApiResponse(
+            responseCode = "500",
+            description = "Curriculum not founded",
+            content = [
+                Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = String::class))
+            ]
+        )
+    )
     @GetMapping("/download/{fileId}")
     fun downloadFile(@PathVariable fileId: String): ResponseEntity<ByteArrayResource> {
-        // Retrieve the file from the database using the fileId
         val fileData = curriculoFileService.getCurriculoFileById(fileId)
 
-        // Set the response headers
         val headers = HttpHeaders()
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"${fileData.name}\"")
 
-        // Create a ByteArrayResource from the file data
         val resource = ByteArrayResource(fileData.byte)
 
         return ResponseEntity.ok()
@@ -118,6 +191,7 @@ class EmployeesController(private val auth: AuthServiceImpl, private val curricu
             .headers(headers)
             .body(resource)
     }
+
 
     @GetMapping("/search")
     fun getSearch(
