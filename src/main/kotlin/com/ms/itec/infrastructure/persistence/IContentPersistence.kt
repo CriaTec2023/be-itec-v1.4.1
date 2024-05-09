@@ -1,8 +1,8 @@
 package com.ms.itec.infrastructure.persistence
 
 import com.ms.itec.application.enums.Tag
-import com.ms.itec.domain.repository.IContentRepository
 import com.ms.itec.domain.entity.content.Content
+import com.ms.itec.domain.repository.IContentRepository
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param

@@ -2,12 +2,10 @@ package com.ms.itec.presentation.controller
 
 import com.ms.itec.application.dto.request.CurriculoDto
 import com.ms.itec.application.dto.response.DtoResponse
-import com.ms.itec.application.dto.response.EmployeeModelDto
 import com.ms.itec.application.service.employee.impl.CurriculoFileServiceImpl
 import com.ms.itec.application.service.employee.impl.EmployeeServiceImpl
 import com.ms.itec.application.service.impl.AuthServiceImpl
 import com.ms.itec.presentation.mapper.FromEntity
-import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse

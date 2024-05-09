@@ -10,6 +10,9 @@ import com.ms.itec.domain.entity.opnions.OpinionsModel
 import com.ms.itec.domain.entity.prospectModel.ProspectModel
 import jakarta.validation.Valid
 import org.springframework.web.multipart.MultipartFile
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -98,15 +101,16 @@ class FromDto {
         )
     }
 
-    fun toMessageWithImageAdvancedDto(image: MultipartFile, text: String, phone: String):MessageWithImageAdvancedDto {
-        var imgInBytes = image.bytes
-        val numberForWhats = formatForWhatsapp(phone)
+    fun toMessageWithImageAdvancedDto(image: MultipartFile, text: String, number: String):MessageWithImageAdvancedDto {
+
+        val numberForWhats = formatForWhatsapp(number)
         return MessageWithImageAdvancedDto(
+            medias = image,
             body = text,
             number = numberForWhats,
             queueId = "47",
             openTicket = "1",
-            image = imgInBytes
+
         )
     }
 
@@ -119,6 +123,7 @@ class FromDto {
         )
 
     }
+
 
 
     fun formatBrazilianPhoneNumber(input: String): String {
@@ -147,7 +152,14 @@ class FromDto {
         append(input) }
     }
 
-
+    @Throws(IOException::class)
+    fun convertMultipartFileToFile(multipartFile: MultipartFile): File {
+        val file = File.createTempFile(multipartFile.originalFilename, null)
+        val outputStream = FileOutputStream(file)
+        outputStream.write(multipartFile.bytes)
+        outputStream.close()
+        return file
+    }
 
     private fun getQueueId(polo: String): String {
         return when (polo) {

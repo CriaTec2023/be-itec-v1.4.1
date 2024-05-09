@@ -1,7 +1,6 @@
 package com.ms.itec.application.service
 
 import com.ms.itec.application.dto.request.MessageAdvancedDto
-import com.ms.itec.application.dto.request.MessageWithImageAdvancedDto
 import com.ms.itec.infrastructure.configuration.feign.FeignConfig
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.RequestBody

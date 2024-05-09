@@ -1,43 +1,53 @@
 package com.ms.itec.application.service.impl
 
-import com.ms.itec.application.dto.request.ListOfNumbersImageAndText
 import com.ms.itec.application.dto.request.MessageWithImageAdvancedDto
 import com.ms.itec.application.dto.request.ProspectModelDto
 import com.ms.itec.application.service.AdvancedServiceMessage
-import com.ms.itec.application.service.AdvancedServiceMessageWithImage
 import com.ms.itec.presentation.excepetion.NotPossibleSendTheMessageForNumbers
 import com.ms.itec.presentation.mapper.FromDto
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 
 @Service
-class AdvancedServiceMessageImpl(private val advancedServiceMessage: AdvancedServiceMessage, private val advancedServiceMessageImg: AdvancedServiceMessageWithImage){
+class AdvancedServiceMessageImpl(
+    private val advancedServiceMessage: AdvancedServiceMessage,
+    private val advancedServiceMessageImg: AdvancedServiceMessageWithImage
+){
+
     fun sendMessage(prospectModelDto: ProspectModelDto){
         val messageAdvancedDto = FromDto().toMessageAdvancedDto(prospectModelDto)
         print(advancedServiceMessage.sendMessage(messageAdvancedDto))
     }
 
-    fun sendMessageWithImage(listData: ListOfNumbersImageAndText): MutableList<MessageWithImageAdvancedDto>{
+    fun sendMessageWithImage(listData: List<String>, image:MultipartFile, text: String): MutableMap<String, String>{
 
-        val listOfMessagesReadyTOSend: MutableList<MessageWithImageAdvancedDto> = mutableListOf()
 
-        listData.numbers.forEach { number ->
-            val messageWithImage = FromDto().toMessageWithImageAdvancedDto(listData.image, listData.text, number)
-            listOfMessagesReadyTOSend.add(messageWithImage)
+        val listOfMessagesResume: MutableMap<String, String> = mutableMapOf()
+        val listOfMessagesReadyToSend: MutableList<MessageWithImageAdvancedDto> = mutableListOf()
+
+        listData.forEach { number ->
+            val messageWithImage = FromDto().toMessageWithImageAdvancedDto(image,text, number)
+            listOfMessagesReadyToSend.add(messageWithImage)
         }
         try {
+            listOfMessagesReadyToSend.forEach{ messageWithImage -> println(messageWithImage)}
 
-            listOfMessagesReadyTOSend.forEach{
-                    messageWithImage-> advancedServiceMessageImg.sendMessageWithImage(
-                        messageWithImage.number,
-                        messageWithImage.openTicket,
-                        messageWithImage.queueId,
-                        messageWithImage.body,
-                        messageWithImage.image
-                    )
+            listOfMessagesReadyToSend.forEach{ messageWithImage ->
+                val response = advancedServiceMessageImg.sendMessage(
+                    img = messageWithImage.medias,
+                    number = messageWithImage.number,
+                    message= messageWithImage.body,
+                    openTicket = messageWithImage.openTicket,
+                    queueId = messageWithImage.queueId
+
+                )
+
+                listOfMessagesResume["Response for :"+ messageWithImage.number] = response
+
+
             }
 
-            return listOfMessagesReadyTOSend
+            return listOfMessagesResume
 
         }catch (e: NotPossibleSendTheMessageForNumbers){
             throw NotPossibleSendTheMessageForNumbers(
@@ -46,11 +56,7 @@ class AdvancedServiceMessageImpl(private val advancedServiceMessage: AdvancedSer
             )
         }
 
-
-
     }
-    fun convertMultipartFileToBinary(file: MultipartFile): ByteArray {
-        return file.bytes
-    }
+
 
 }
